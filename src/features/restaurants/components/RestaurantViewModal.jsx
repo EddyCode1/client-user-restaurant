@@ -58,7 +58,7 @@ export default function RestaurantViewModal({ isOpen, onClose, restaurant }) {
               <TouchableOpacity onPress={() => handlePress(null, 'CreateReservation', true)}>
                 <Text style={styles.menuItem}>RESERVACIONES</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handlePress(null, 'Map', true)}>
+              <TouchableOpacity onPress={() => handlePress(null, 'RestaurantMap', true)}>
                 <Text style={styles.menuItem}>VER EN MAPA</Text>
               </TouchableOpacity>
             </View>

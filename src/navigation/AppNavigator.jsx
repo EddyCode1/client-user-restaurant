@@ -16,7 +16,7 @@ const AppNavigator = () => {
         }
 
         let active = true;
-        import("./MainTabs").then((mod) => {
+        import("./MainStack").then((mod) => {
             if (active) setMainTabs(() => mod.default);
         });
 
