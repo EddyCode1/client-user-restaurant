@@ -1,6 +1,16 @@
 # Trello — Cliente Restaurante
 
-Importar manualmente o vía CLI de Trello cuando tengas el board URL.
+**Board:** [gestion-de-restaurante](https://trello.com/b/DeIhDyk9/gestion-de-restaurante)
+
+Credenciales en `deploy/.env.trello` (gitignored). Guía completa: [`TRELLO.md`](TRELLO.md)
+
+## Comandos
+
+```bash
+pnpm trello:sync          # crear tarjetas del proyecto
+pnpm trello lists         # ver columnas
+pnpm trello cards         # ver tarjetas
+```
 
 ## Listas
 

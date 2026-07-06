@@ -12,7 +12,9 @@
     "serve:web": "serve dist -l 8081 -s",
     "prebuild": "expo prebuild",
     "run:android": "expo run:android",
-    "run:ios": "expo run:ios"
+    "run:ios": "expo run:ios",
+    "trello:sync": "node deploy/create-trello-cards.mjs",
+    "trello": "node deploy/trello-cli.mjs"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",
