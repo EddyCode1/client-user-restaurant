@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import useAuthStore from '../../../shared/stores/useAuthStore';
-import logoRestaurant from '../../../shared/assets/img/logo.png';
+import { useAuthStore } from '../../../shared/store/authStore';
+import logoRestaurant from '../../../../assets/bank-logo.png';
 
 const CustomerSidebar = ({ isOpen = true }) => {
   const navigation = useNavigation();

@@ -22,7 +22,7 @@ const useOrderStore = create((set) => ({
   fetchOrders: async (params = {}) => {
     set({ loading: true, error: null });
     try {
-      const response = await adminClient.get('/orders', { params });
+      const response = await adminClient.get('/order', { params });
       const orders = normalizeOrderList(response.data);
       set({ orders, loading: false });
       return { success: true, data: orders };
@@ -35,7 +35,7 @@ const useOrderStore = create((set) => ({
   fetchOrderById: async (id) => {
     set({ loading: true, error: null });
     try {
-      const response = await adminClient.get(`/orders/${id}`);
+      const response = await adminClient.get(`/order/${id}`);
       const order = response.data?.data || response.data;
       set({ currentOrder: order, loading: false });
       return { success: true, data: order };
@@ -49,8 +49,8 @@ const useOrderStore = create((set) => ({
     set({ loading: true, error: null });
     try {
       const response = id
-        ? await adminClient.put(`/orders/${id}`, formData)
-        : await adminClient.post('/orders', formData);
+        ? await adminClient.put(`/order/${id}`, formData)
+        : await adminClient.post('/order', formData);
       const order = response.data?.data || response.data;
       await set((state) => ({ orders: id ? state.orders : [order, ...state.orders] }));
       set({ loading: false });
@@ -64,7 +64,7 @@ const useOrderStore = create((set) => ({
   updateOrderStatus: async (id, status) => {
     set({ loading: true, error: null });
     try {
-      await adminClient.put(`/orders/${id}`, { Orders_status: status });
+      await adminClient.put(`/order/${id}`, { Orders_status: status });
       set((state) => ({
         orders: state.orders.map((order) =>
           order._id === id ? { ...order, Orders_status: status } : order

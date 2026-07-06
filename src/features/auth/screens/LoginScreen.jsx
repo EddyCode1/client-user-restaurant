@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import useAuthStore from '../../../shared/store/authStore';
+import { useAuthStore } from '../../../shared/store/authStore';
 import { authService } from '../../../shared/api/services/authService';
-import { isClientRole } from '../../../shared/utils/imageUtils';
+import { isClientRole } from '../../../shared/auth/roles';
 
 /**
  * LoginScreen
@@ -19,18 +19,20 @@ const LoginScreen = ({ navigation }) => {
     try {
       const result = await authService.login(data.email, data.password);
 
-      if (result.success) {
-        login(result.token, result.user, result.refreshToken);
-        const role = result.user?.rol || result.user?.role;
-        
-        if (isClientRole(role)) {
-          navigation.navigate('CustomerHome'); 
-        } else {
-          Alert.alert('Acceso denegado', 'Esta aplicación es exclusiva para clientes.');
-        }
+      if (!result.success) {
+        Alert.alert('Error', result.error || 'Credenciales inválidas');
+        return;
       }
+
+      const role = result.user?.rol || result.user?.role;
+      if (!isClientRole(role)) {
+        Alert.alert('Acceso denegado', 'Esta aplicación es exclusiva para clientes.');
+        return;
+      }
+
+      login(result.token, result.user, result.refreshToken);
     } catch (err) {
-      Alert.alert('Error', 'Credenciales inválidas');
+      Alert.alert('Error', 'No se pudo conectar con el servidor');
       console.error(err);
     } finally {
       setIsLoading(false);

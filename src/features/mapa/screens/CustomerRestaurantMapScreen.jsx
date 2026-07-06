@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker } from '../../../shared/components/MapViewCompat';
 import { useRoute } from '@react-navigation/native';
 import { restaurantService } from '../../restaurant/services/restaurantService';
 
@@ -59,8 +59,8 @@ export default function CustomerRestaurantMapScreen() {
         >
           <Marker
             coordinate={{ latitude: lat, longitude: lng }}
-            title={restaurant.nombre}
-            description={restaurant.direccion}
+            title={restaurant.restaurant_name || restaurant.name || 'Restaurante'}
+            description={restaurant.restaurant_direction || restaurant.address || ''}
           />
         </MapView>
       ) : (

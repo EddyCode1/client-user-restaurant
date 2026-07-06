@@ -25,12 +25,7 @@ const publicClient = attachAuthHeader(
     }),
 );
 
-const adminClient = attachAuthHeader(
-    axios.create({
-        baseURL: `${ENDPOINTS.API}/admin`,
-        headers: { "Content-Type": "application/json" },
-    }),
-);
+const adminClient = publicClient;
 
 export { bankingClient, publicClient, authClient };
 export default adminClient;

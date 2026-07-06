@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import useDetallePedidoStore from '../../detallepedido/store/useDetallePedidoStore';
 import useOrderStore from '../../orders/store/useOrderStore';
-import notificationService from '../../../shared/api/services/notificationService';
+import useDetallePedidoStore from '../../detallepedido/store/useDetallePedidoStore';
 
 const MAX_MINUTES = 30;
 

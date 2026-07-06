@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: gestor_restaurante_mongo
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: gestor_restaurante
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  node-api:
+    build:
+      context: ../Gesti-n-de-Restaurante
+      dockerfile: Dockerfile
+    container_name: gestor_restaurante_api
+    restart: always
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      PORT: "3006"
+      NODE_ENV: development
+      URI_MONGO: mongodb://mongodb:27017/gestor_restaurante
+      JWT_SECRET: ${JWT_SECRET:-clave_secreta_gestor_restaurante_2025}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-30m}
+      JWT_ISSUER: ${JWT_ISSUER:-GestorRestaurante}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-GestorRestauranteApp}
+    ports:
+      - "3006:3006"
+    networks:
+      - app-network
+
+  mobile-app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        EXPO_PUBLIC_DEV_HOST: ${EXPO_PUBLIC_DEV_HOST:-localhost}
+        EXPO_PUBLIC_API_PORT: ${EXPO_PUBLIC_API_PORT:-3006}
+        EXPO_PUBLIC_AUTH_URL: ${EXPO_PUBLIC_AUTH_URL:-http://localhost:3006/GestorRestaurante/v1/auth}
+        EXPO_PUBLIC_API_BASE: ${EXPO_PUBLIC_API_BASE:-http://localhost:3006/GestorRestaurante/v1}
+    container_name: client_user_restaurant
+    restart: unless-stopped
+    depends_on:
+      - node-api
+    ports:
+      - "8081:8081"
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+
+networks:
+  app-network:
+    driver: bridge

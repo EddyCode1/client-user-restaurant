@@ -4,10 +4,10 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import useAuthStore from '../../../shared/stores/useAuthStore';
+import { useAuthStore } from '../../../shared/store/authStore';
 import useRestaurantStore from '../../restaurant/store/useRestaurantStore';
 import useMenuStore from '../../menus/store/useMenuStore';
-import useCouponStore from '../../coupon/store/useCouponStore';
+import useCouponStore from '../../coupons/store/useCouponStore';
 import useOrderStore from '../../orders/store/useOrderStore';
 
 export default function CustomerOrderCreateScreen() {

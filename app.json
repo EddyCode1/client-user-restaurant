@@ -12,7 +12,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Omakase usa tu ubicación para mostrar restaurantes cercanos y rutas en el mapa."
+      },
+      "bundleIdentifier": "com.omakase.clientuser"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,12 +25,18 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.anonymous.clientuser"
+      "package": "com.omakase.clientuser",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "expo-dev-client",
+      "expo-location",
       "expo-secure-store",
       "expo-sharing",
       "@react-native-community/datetimepicker"

@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Importa tus servicios (asegúrate de que sean compatibles con RN)
-import useAuthStore from '../../../shared/stores/useAuthStore';
+import { useAuthStore } from '../../../shared/store/authStore';
 import reservationService from '../../../shared/api/services/reservationService';
 import { tableService } from '../../tables/services/tableService';
 

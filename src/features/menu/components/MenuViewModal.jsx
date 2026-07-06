@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import { getDishByIdService, getDishesByRestaurantService } from '../../dishes/services/DishService';
-import { getBeverageByIdService, getBeveragesByRestaurantService } from '../../beverages/services/BeverageService';
+import { getBeverageByIdService, getBeveragesByRestaurantService } from '../../beverages/services/beverageService';
 import { restaurantService } from '../../restaurant/services/restaurantService';
 
 export const MenuViewModal = ({ isOpen, onClose, menu }) => {

@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import useOrderStore from '../../orders/store/useOrderStore';
 import { getDetallePedidosByOrderService } from '../../detallepedido/services/DetallePedidoService';
 import { getDishByIdService } from '../../dishes/services/DishService';
-import { getBeverageByIdService } from '../../beverages/services/BeverageService';
+import { getBeverageByIdService } from '../../beverages/services/beverageService';
 import {
   asId,
   formatDateTime,

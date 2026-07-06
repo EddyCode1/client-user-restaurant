@@ -3,7 +3,7 @@ import {
   View, Text, TextInput, StyleSheet, FlatList, 
   ActivityIndicator, TouchableOpacity, ImageBackground 
 } from 'react-native';
-import useAuthStore from '../../../shared/stores/useAuthStore';
+import { useAuthStore } from '../../../shared/store/authStore';
 import reservationService from '../../../shared/api/services/reservationService';
 import CustomerReservationList from '../components/CustomerReservationList';
 import ReservationViewModal from '../components/ReservationViewModal';

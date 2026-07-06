@@ -49,9 +49,28 @@ export function isAdminUser(user) {
   return isAdminRole(getUserRole(user));
 }
 
+const CLIENT_ROLE_KEYS = Object.freeze([
+  'CLIENTE',
+  'ROL_CLIENTE',
+  'ROL_TYPE_CLIENTE',
+  'USER_ROLE',
+  'USER',
+]);
+
+/**
+ * Evalúa si el rol corresponde a un cliente de la app.
+ */
+export function isClientRole(role) {
+  const value = String(role || '').trim().toUpperCase();
+  if (!value) return false;
+  if (isAdminRole(value)) return false;
+  return CLIENT_ROLE_KEYS.some((key) => value.includes(key)) || value.includes('CLIENT');
+}
+
 export default {
   normalizeRole,
   isAdminRole,
   getUserRole,
   isAdminUser,
+  isClientRole,
 };

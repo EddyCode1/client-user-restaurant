@@ -49,7 +49,3 @@ export const useCoupon = (id) => {
   };
 };
 
-export {
-  useCoupons,
-  useCoupon,
-} from './useCoupons.js';
