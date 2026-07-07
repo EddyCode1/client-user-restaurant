@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import useOrderStore from '../../orders/store/useOrderStore';
-import { getDetallePedidosByOrderService } from '../../detallepedido/services/DetallePedidoService';
+import { getDetallePedidosByOrderService } from '../../detallepedido/services/detallePedidoService';
 import { getDishByIdService } from '../../dishes/services/DishService';
 import { getBeverageByIdService } from '../../beverages/services/beverageService';
 import {
@@ -48,7 +48,7 @@ const CustomerFacturaPrintScreen = ({ route }) => {
       setDetailError('');
       try {
         const result = await getDetallePedidosByOrderService(selectedOrderId);
-        const detalles = extractDetalleList(result);
+        const detalles = extractDetalleList(result?.data ?? result);
         const items = await Promise.all(
           detalles.map(async (detail) => {
             const qty = Number(detail?.candidadproducto || detail?.quantity || 1);

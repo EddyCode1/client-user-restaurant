@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import ScreenBackHeader from '../../../shared/components/ScreenBackHeader';
 import useOrderStore from '../../orders/store/useOrderStore';
-import { getDetallePedidosByOrderService } from '../../detallepedido/services/DetallePedidoService';
+import { getDetallePedidosByOrderService } from '../../detallepedido/services/detallePedidoService';
 import { getDishByIdService } from '../../dishes/services/DishService';
 import { getBeverageByIdService } from '../../beverages/services/beverageService';
 import {
@@ -19,6 +20,12 @@ const CustomerFacturaScreen = () => {
 
   // El orderId vendría por los params de la ruta de navegación
   const [selectedOrderId, setSelectedOrderId] = useState(route.params?.orderId || '');
+
+  useEffect(() => {
+    if (route.params?.orderId) {
+      setSelectedOrderId(route.params.orderId);
+    }
+  }, [route.params?.orderId]);
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [detailItems, setDetailItems] = useState([]);
   const [detailError, setDetailError] = useState('');
@@ -50,7 +57,7 @@ const CustomerFacturaScreen = () => {
       setDetailError('');
       try {
         const result = await getDetallePedidosByOrderService(selectedOrderId);
-        const detalles = extractDetalleList(result);
+        const detalles = extractDetalleList(result?.data ?? result);
         const items = await Promise.all(
           detalles.map(async (detail) => {
             const qty = Number(detail?.candidadproducto || detail?.quantity || 1);
@@ -93,7 +100,7 @@ const CustomerFacturaScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.headerTitle}>FACTURA</Text>
+      <ScreenBackHeader title="Factura" subtitle={selectedOrder ? `Orden #${selectedOrder?.Orders_number || '---'}` : ''} />
 
       {/* Aquí podrías mapear un selector o lista de órdenes si deseas cambiar de orden */}
       

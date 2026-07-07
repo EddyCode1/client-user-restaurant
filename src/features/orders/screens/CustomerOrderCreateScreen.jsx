@@ -9,6 +9,7 @@ import useRestaurantStore from '../../restaurant/store/useRestaurantStore';
 import useMenuStore from '../../menus/store/useMenuStore';
 import useCouponStore from '../../coupons/store/useCouponStore';
 import useOrderStore from '../../orders/store/useOrderStore';
+import ScreenBackHeader from '../../../shared/components/ScreenBackHeader';
 
 export default function CustomerOrderCreateScreen() {
   const navigation = useNavigation();
@@ -63,16 +64,17 @@ export default function CustomerOrderCreateScreen() {
       client_name: user?.nombre || user?.name || 'Cliente',
     };
 
-    const result = await saveOrder(payload);
     if (result?.success) {
       Alert.alert('Éxito', 'Orden creada con éxito');
       navigation.navigate('OrderDetails', { orderId: result.data._id || result.data.id });
+    } else {
+      Alert.alert('Error', result?.error || 'No se pudo crear la orden');
     }
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.headerTitle}>CREAR ORDEN</Text>
+      <ScreenBackHeader title="Crear orden" subtitle={restaurantContext.name || 'Nuevo pedido'} />
       
       <View style={styles.card}>
         <Text style={styles.label}>DOMICILIO</Text>

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import ScreenBackHeader from '../../../shared/components/ScreenBackHeader';
 import useMenuStore from '../../menus/store/useMenuStore';
 import useRestaurantStore from '../../restaurant/store/useRestaurantStore';
 import { MenuViewModal } from '../components/MenuViewModal';
@@ -42,11 +43,7 @@ export default function CustomerRestaurantMenuScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.preTitle}>MENÚ DEL RESTAURANTE</Text>
-        <Text style={styles.title}>{restaurantName || 'Cargando...'}</Text>
-        <Text style={styles.count}>{filteredMenus.length} menús disponibles</Text>
-      </View>
+      <ScreenBackHeader title={restaurantName || 'Menú'} subtitle="Platillos disponibles" />
 
       <CustomerMenuList
         menus={filteredMenus}
