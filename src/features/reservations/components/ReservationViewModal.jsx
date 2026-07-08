@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import reservationService from '../../../shared/api/services/reservationService';
 import { getReservationDisplayStatus, getReservationStatusStyles } from '../utils/reservationStatus';
 
-export default function ReservationViewModal({ isOpen, onClose, reservation, onReservationUpdated }) {
+export default function ReservationViewModal({ isOpen, visible, onClose, reservation, onReservationUpdated }) {
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
+  const modalVisible = visible ?? isOpen;
 
   if (!reservation) return null;
 
@@ -14,17 +14,21 @@ export default function ReservationViewModal({ isOpen, onClose, reservation, onR
   const canModify = status !== 'CANCELADA' && status !== 'COMPLETADA';
 
   const handleCancelReservation = async () => {
-    const id = reservation?._id || reservation?.id;
-    const result = await reservationService.cancelReservation(id);
-    if (result) {
-      onReservationUpdated?.(result);
-      setShowCancelPrompt(false);
-      onClose();
+    try {
+      const id = reservation?._id || reservation?.id;
+      const result = await reservationService.cancelReservation(id);
+      if (result) {
+        onReservationUpdated?.(result);
+        setShowCancelPrompt(false);
+        onClose();
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message || 'No se pudo cancelar la reservación');
     }
   };
 
   return (
-    <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
+    <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           <ScrollView contentContainerStyle={styles.scroll}>
