@@ -16,6 +16,13 @@ export default function CustomerOrdersScreen() {
   const { orders, loading, fetchOrders } = useOrderStore();
   const [activeTab, setActiveTab] = useState('Todas');
 
+  const handleOpenFactura = (order) => {
+    navigation.navigate('Factura', {
+      orderId: order?._id || order?.id,
+      order,
+    });
+  };
+
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
@@ -33,9 +40,7 @@ export default function CustomerOrdersScreen() {
   const renderOrderCard = ({ item: order }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() =>
-        navigation.navigate('OrderDetails', { orderId: order._id || order.id })
-      }
+      onPress={() => handleOpenFactura(order)}
     >
       <View style={styles.row}>
         <Text style={styles.orderNumber}>#{order?.Orders_number || '---'}</Text>
@@ -52,7 +57,15 @@ export default function CustomerOrdersScreen() {
 
       <Text style={styles.infoText}>Domicilio: {order.Orders_domicile || 'N/A'}</Text>
       <Text style={styles.totalText}>Total: Q{Number(order.Orders_total || 0).toFixed(2)}</Text>
-      <Text style={styles.tapHint}>Toca para ver factura →</Text>
+      <View style={styles.actionsRow}>
+        <Text style={styles.tapHint}>Toca la tarjeta para ver detalles</Text>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => handleOpenFactura(order)}
+        >
+          <Text style={styles.actionButtonText}>Ver factura</Text>
+        </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
 
@@ -120,7 +133,15 @@ const styles = StyleSheet.create({
   divider: { height: 1, backgroundColor: '#333', marginVertical: 8 },
   infoText: { fontSize: 12, color: '#888' },
   totalText: { fontSize: 16, fontWeight: 'bold', color: '#fff', marginTop: 8 },
-  tapHint: { fontSize: 10, color: '#6b7280', marginTop: 8 },
+  actionsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
+  tapHint: { fontSize: 10, color: '#6b7280', flex: 1, marginRight: 8 },
+  actionButton: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
+  },
+  actionButtonText: { color: '#111', fontSize: 11, fontWeight: '800' },
   empty: { color: '#9ca3af', textAlign: 'center', marginTop: 40 },
   fab: {
     position: 'absolute',
