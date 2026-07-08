@@ -22,7 +22,7 @@ services:
 
   node-api:
     build:
-      context: ../Gesti-n-de-Restaurante
+      context: ../../Gesti-n-de-Restaurante
       dockerfile: Dockerfile
     container_name: gestor_restaurante_api
     restart: always

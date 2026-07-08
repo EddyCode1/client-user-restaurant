@@ -7,7 +7,7 @@ import CustomerRestaurantListScreen from "../features/restaurants/pages/Customer
 import CustomerMenuScreen from "../features/menu/screens/CustomerMenuScreen";
 import CustomerOrdersScreen from "../features/orders/screens/CustomerOrdersScreen";
 import CustomerReservationListScreen from "../features/reservations/screens/CustomerReservationListScreen";
-import CouponsScreen from "../features/coupons/screens/CouponsScreen";
+import CouponsScreen from "../features/coupons/screens/CouponsScreenIntegrated";
 import ContactScreen from "../features/contacts/screens/ContactScreen";
 
 const Tab = createBottomTabNavigator();

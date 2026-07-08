@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import reservationService from '../../../shared/api/services/reservationService';
 import { getReservationDisplayStatus, getReservationStatusStyles } from '../utils/reservationStatus';
 
 export default function ReservationViewModal({ isOpen, visible, onClose, reservation, onReservationUpdated }) {
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
-  const open = visible ?? isOpen;
+  const open = !!(visible ?? isOpen);
 
   if (!reservation) return null;
 
@@ -15,22 +14,26 @@ export default function ReservationViewModal({ isOpen, visible, onClose, reserva
   const canModify = status !== 'CANCELADA' && status !== 'COMPLETADA';
 
   const handleCancelReservation = async () => {
-    const id = reservation?._id || reservation?.id;
-    const result = await reservationService.cancelReservation(id);
-    if (result) {
-      onReservationUpdated?.(result);
-      setShowCancelPrompt(false);
-      onClose();
+    try {
+      const id = reservation?._id || reservation?.id;
+      const result = await reservationService.cancelReservation(id);
+      if (result) {
+        onReservationUpdated?.(result);
+        setShowCancelPrompt(false);
+        onClose();
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message || 'No se pudo cancelar la reservación');
     }
   };
 
   return (
-    <Modal visible={!!open} transparent animationType="slide" onRequestClose={onClose}>
+    <Modal visible={open} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           <ScrollView contentContainerStyle={styles.scroll}>
             <Text style={styles.title}>DETALLE DE RESERVACIÓN</Text>
-            
+
             <View style={styles.section}>
               <Text style={styles.label}>RESTAURANTE</Text>
               <Text style={styles.value}>{restaurantName}</Text>
@@ -67,7 +70,7 @@ export default function ReservationViewModal({ isOpen, visible, onClose, reserva
                         <Text>VOLVER</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={handleCancelReservation} style={[styles.btnSmall, { backgroundColor: '#ef4444' }]}>
-                        <Text style={{color: '#fff'}}>SÍ, CANCELAR</Text>
+                        <Text style={{ color: '#fff' }}>SÍ, CANCELAR</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -107,5 +110,5 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', justifyContent: 'flex-end', gap: 10, marginTop: 10 },
   btnSmall: { padding: 10, borderRadius: 8, backgroundColor: '#fff' },
   btnClose: { marginTop: 20, alignItems: 'center' },
-  btnCloseText: { color: '#9ca3af', fontWeight: 'bold' }
+  btnCloseText: { color: '#9ca3af', fontWeight: 'bold' },
 });

@@ -53,7 +53,7 @@ pnpm trello cards         # ver tarjetas
 | Permisos POST /reservation para rol CLIENTE en backend | Listo | Integrante B |
 | Fix crear pedido + cupón en CustomerOrderCreateScreen | Listo | — |
 | Fix modal reservas + filtro user_id + cancelación | Listo | — |
-| Pantallas factura/cupones E2E | Por hacer | Integrante A |
+| Pantallas factura/cupones E2E | Listo | ft/zeta + merge main |
 
 ---
 
