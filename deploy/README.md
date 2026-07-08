@@ -17,9 +17,22 @@ docker compose up --build
 
 | Servicio    | URL                                              |
 |-------------|--------------------------------------------------|
-| API         | http://localhost:3006/GestorRestaurante/v1/health |
-| Cliente web | http://localhost:8081                            |
-| MongoDB     | localhost:27017                                  |
+| API         | http://localhost:3016/GestorRestaurante/v1/health |
+| Cliente web | http://localhost:8082                            |
+| MongoDB     | localhost:27018                                  |
+
+> Puertos 3016/8082/27018 si 3006/8081/27017 están ocupados (ej. banco).
+
+## Opción A+ — Docker + app nativa con mapas (un comando)
+
+Desde la raíz del cliente móvil:
+
+```bash
+pnpm install
+pnpm start:all
+```
+
+Levanta Docker, compila Android con mapas la primera vez, y abre Metro.
 
 ### Usuarios de prueba (seed automático al iniciar API)
 

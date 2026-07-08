@@ -2,43 +2,53 @@
 
 Guía rápida para desarrollo Android/iOS. Ver también [`deploy/README.md`](deploy/README.md).
 
-## Requisitos
-
-- Node 22 + pnpm
-- Android Studio (emulador) o dispositivo físico
-- Backend en `:3006` (ver deploy-restaurante)
-
-> **No uses Expo Go.** Esta app requiere dev build por `expo-dev-client` y `react-native-maps`.
-
-## Setup
+## Un solo comando (recomendado)
 
 ```bash
 pnpm install
-cp .env.example .env
+pnpm start:all
 ```
 
-### `.env` según plataforma
+Eso hace **todo en orden**:
+1. Crea `.env` si falta
+2. Levanta Docker (Mongo + API + web)
+3. **Primera vez:** compila e instala la app Android **con mapas** (`expo prebuild` + `run:android`)
+4. Arranca Metro (`expo dev`)
 
-| Entorno            | EXPO_PUBLIC_DEV_HOST |
-|--------------------|----------------------|
-| Emulador Android   | (dejar localhost; usa 10.0.2.2 automático) |
-| Simulador iOS      | localhost            |
-| Dispositivo físico | IP de tu Mac (ej. 192.168.1.45) |
+| Servicio | URL |
+|----------|-----|
+| API (Docker) | http://localhost:3016/GestorRestaurante/v1/health |
+| App web (Docker) | http://localhost:8082 |
+| Metro / dev client | QR en terminal |
 
-Actualiza también `EXPO_PUBLIC_AUTH_URL` y `EXPO_PUBLIC_API_BASE` con la misma IP en dispositivo físico.
+> **No uses Expo Go.** Requiere dev build (`expo-dev-client` + `react-native-maps`).
 
-## Dev build
+### Días siguientes (ya compilaste una vez)
 
 ```bash
-pnpm prebuild
-pnpm run:android    # o pnpm run:ios
+pnpm start:all
 ```
 
-Para desarrollo con hot reload después del primer build:
+Salta el compile nativo si existe `.expo/native-android-ready`.
+
+Solo Metro + Docker:
 
 ```bash
+pnpm docker:up && pnpm dev
+```
+
+### Forzar rebuild de mapas / plugins nativos
+
+```bash
+pnpm rebuild:native
 pnpm dev
 ```
+
+## Requisitos
+
+- Node 22 + pnpm
+- Docker Desktop
+- Android Studio (emulador) o dispositivo físico
 
 ## Credenciales de prueba
 
@@ -46,22 +56,8 @@ pnpm dev
 |-------------------------|--------------|---------|
 | cliente@restaurante.com | Cliente1234  | CLIENTE |
 
-## Flujo MVP
+## Mapas
 
-1. Login con usuario CLIENTE
-2. MainTabs carga automáticamente
-3. Pestaña **Menú** → GET `/menu` con JWT
+Ver [`docs/MAPAS.md`](docs/MAPAS.md).
 
-## Mapas (jsajche)
-
-Ver [`docs/MAPAS.md`](docs/MAPAS.md) para la epic de mapas nativos.
-
-Si ves **`View config not found for component AIRMap`**, tu dev build no incluye mapas nativos. Recompila:
-
-```bash
-npx expo prebuild --clean
-npx expo run:android    # o run:ios
-pnpm dev
-```
-
-Luego abre la app **Omakase** (dev build), no Expo Go.
+Si ves *"Mapa nativo no disponible"*: corre `pnpm rebuild:native` o `pnpm start:all` (borra `.expo/native-android-ready` antes).

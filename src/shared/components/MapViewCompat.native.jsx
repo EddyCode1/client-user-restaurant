@@ -32,7 +32,7 @@ const MapFallback = forwardRef(({ style, initialRegion }, ref) => (
   <View ref={ref} style={[styles.fallback, style]}>
     <Text style={styles.title}>Mapa nativo no disponible</Text>
     <Text style={styles.subtitle}>
-      Recompila la dev build con mapas: npx expo prebuild --clean && npx expo run:android
+      Recompila con: npm run rebuild:native  (o borra .expo/native-android-ready y npm run start:all)
     </Text>
     {initialRegion ? (
       <Text style={styles.coords}>
