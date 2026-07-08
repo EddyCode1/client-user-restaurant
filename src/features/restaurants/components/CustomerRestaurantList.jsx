@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Ionicons } from '@expo/vector-icons';
 import CustomerRestaurantCard from './CustomerRestaurantCard';
 
-export default function CustomerRestaurantList({ restaurants, loading, onView }) {
+export default function CustomerRestaurantList({ restaurants, loading, onView, listHeaderComponent = null }) {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
@@ -31,6 +31,7 @@ export default function CustomerRestaurantList({ restaurants, loading, onView })
       renderItem={({ item }) => (
         <CustomerRestaurantCard restaurant={item} onView={onView} />
       )}
+      ListHeaderComponent={listHeaderComponent}
       contentContainerStyle={styles.listContent}
       showsVerticalScrollIndicator={false}
     />
@@ -53,11 +54,12 @@ const styles = StyleSheet.create({
   },
   emptyTitle: { color: '#f8fafc', fontSize: 18, fontWeight: 'bold', marginTop: 20, letterSpacing: 1 },
   emptySubtitle: { color: '#9ca3af', marginTop: 8, fontStyle: 'italic', textAlign: 'center' },
-  listContent: { paddingHorizontal: 20, paddingBottom: 40 }
+  listContent: { paddingHorizontal: 20, paddingBottom: 40, flexGrow: 1 },
 });
 
 CustomerRestaurantList.propTypes = {
   restaurants: PropTypes.array,
   loading: PropTypes.bool,
   onView: PropTypes.func.isRequired,
+  listHeaderComponent: PropTypes.node,
 };
