@@ -39,7 +39,8 @@
       "expo-location",
       "expo-secure-store",
       "expo-sharing",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "react-native-maps"
     ],
     "experiments": {
       "tsconfigPaths": false

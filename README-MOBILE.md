@@ -55,3 +55,13 @@ pnpm dev
 ## Mapas (jsajche)
 
 Ver [`docs/MAPAS.md`](docs/MAPAS.md) para la epic de mapas nativos.
+
+Si ves **`View config not found for component AIRMap`**, tu dev build no incluye mapas nativos. Recompila:
+
+```bash
+npx expo prebuild --clean
+npx expo run:android    # o run:ios
+pnpm dev
+```
+
+Luego abre la app **Omakase** (dev build), no Expo Go.
