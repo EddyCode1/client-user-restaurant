@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import CustomerSidebar from '../components/CustomerSidebar';
-import CustomerNavbarBlack from '../components/CustomerNavbarBlack';
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import CustomerSidebar from '../../navbar/components/CustomerSidebar';
+import CustomerNavbarBlack from '../../navbar/components/CustomerNavbarBlack';
 
-/**
- * Layout principal del Cliente adaptado a React Native
- */
 const CustomerMainLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -13,20 +10,28 @@ const CustomerMainLayout = ({ children }) => {
     setIsSidebarOpen((prev) => !prev);
   };
 
+  const handleCloseSidebar = () => {
+    if (isSidebarOpen) setIsSidebarOpen(false);
+  };
+
   return (
     <View style={styles.container}>
-      {/* Sidebar del Cliente */}
-      {isSidebarOpen && <CustomerSidebar isOpen={isSidebarOpen} />}
+      {/* Sidebar del Cliente (animado) */}
+      <CustomerSidebar isOpen={isSidebarOpen} />
+
+      {/* Backdrop para cerrar sidebar al tocar fuera */}
+      {isSidebarOpen && (
+        <TouchableWithoutFeedback onPress={handleCloseSidebar}>
+          <View style={styles.backdrop} />
+        </TouchableWithoutFeedback>
+      )}
 
       {/* Contenido principal */}
       <View style={styles.mainContainer}>
-        {/* NavbarBlack del Cliente */}
-        <CustomerNavbarBlack 
-          isSidebarOpen={isSidebarOpen} 
-          onToggleSidebar={handleToggleSidebar} 
+        <CustomerNavbarBlack
+          isSidebarOpen={isSidebarOpen}
+          onToggleSidebar={handleToggleSidebar}
         />
-
-        {/* Área de renderizado de la página */}
         <View style={styles.content}>
           {children}
         </View>
@@ -36,19 +41,28 @@ const CustomerMainLayout = ({ children }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    flexDirection: 'row', 
-    backgroundColor: '#000' 
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#000',
   },
-  mainContainer: { 
-    flex: 1, 
-    flexDirection: 'column' 
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 50,
   },
-  content: { 
-    flex: 1, 
-    backgroundColor: '#000' 
-  }
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  content: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
 });
 
 export default CustomerMainLayout;

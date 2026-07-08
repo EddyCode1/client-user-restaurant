@@ -1,4 +1,6 @@
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CustomerMainLayout from '../features/layout/screens/CustomerMainLayout';
 
 import MainTabs from './MainTabs';
 import CustomerMapaGeneralScreen from '../features/mapa/screens/CustomerMapaGeneralScreen';
@@ -13,10 +15,18 @@ import CustomerReviewsScreen from '../features/restaurants/screens/CustomerRevie
 
 const Stack = createNativeStackNavigator();
 
+function MainTabsWithLayout() {
+  return (
+    <CustomerMainLayout>
+      <MainTabs />
+    </CustomerMainLayout>
+  );
+}
+
 export default function MainStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="MainTabs" component={MainTabs} />
+      <Stack.Screen name="MainTabs" component={MainTabsWithLayout} />
       <Stack.Screen name="MapaGeneral" component={CustomerMapaGeneralScreen} />
       <Stack.Screen name="RestaurantMap" component={CustomerRestaurantMapScreen} />
       <Stack.Screen name="RestaurantMenu" component={CustomerRestaurantMenuScreen} />

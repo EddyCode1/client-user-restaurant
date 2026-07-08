@@ -5,11 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 const menuItems = [
   { id: 1, label: 'Restaurantes', path: 'Restaurants' },
   { id: 2, label: 'Mapa General', path: 'MapaGeneral' },
-  { id: 3, label: 'Mesas', path: 'Tables' },
+  { id: 3, label: 'Mesas', path: 'TableLayout' },
   { id: 4, label: 'Reservaciones', path: 'Reservations' },
   { id: 5, label: 'Menú', path: 'Menu' },
-  { id: 6, label: 'Perfil', path: 'Profile' },
-  { id: 7, label: 'Orders', path: 'Orders' },
+  { id: 6, label: 'Órdenes', path: 'Orders' },
 ];
 
 const NAVBAR_TITLE = 'CONOZCA NUESTRAS RAMAS';
