@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Linking } from 'react-native';
-import { useContactStore } from '../store/useContactStore';
+import useContactStore from '../store/useContactStore';
 
 /**
  * ContactScreen
