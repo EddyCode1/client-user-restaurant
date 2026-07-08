@@ -32,7 +32,7 @@ export default function CustomerReservationListScreen() {
   const loadReservations = async () => {
     setLoading(true);
     try {
-      const data = await reservationService.getReservations({ userId: user?._id || user?.id });
+      const data = await reservationService.getReservations({ user_id: user?._id || user?.id });
       setReservations(Array.isArray(data) ? data : []);
     } catch {
       setReservations([]);

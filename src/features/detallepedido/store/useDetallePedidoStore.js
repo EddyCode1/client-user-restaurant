@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import {
-  getDetallePedidos,
+  getDetallePedidosByOrder,
   getDetallePedidoById,
   createDetallePedido,
   updateDetallePedido,
@@ -13,16 +13,7 @@ const normalizeList = (payload) => {
   return [];
 };
 
-const matchesOrderId = (item, orderId) => {
-  const candidate =
-    item?.Order_id ||
-    item?.order_id ||
-    item?.orderId ||
-    item?.Orders_id;
-  return String(candidate) === String(orderId);
-};
-
-const useDetallePedidoStore = create((set, get) => ({
+const useDetallePedidoStore = create((set) => ({
   detallePedidos: [],
   loading: false,
   error: null,
@@ -34,9 +25,8 @@ const useDetallePedidoStore = create((set, get) => ({
   fetchDetallePedidosByOrder: async (orderId) => {
     set({ loading: true, error: null });
     try {
-      const response = await getDetallePedidos();
-      const all = normalizeList(response);
-      const filtered = all.filter((item) => matchesOrderId(item, orderId));
+      const response = await getDetallePedidosByOrder(orderId);
+      const filtered = normalizeList(response);
       set({ detallePedidos: filtered, loading: false });
       return { success: true, data: filtered };
     } catch (error) {

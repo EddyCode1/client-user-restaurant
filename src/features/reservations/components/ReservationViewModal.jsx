@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import reservationService from '../../../shared/api/services/reservationService';
 import { getReservationDisplayStatus, getReservationStatusStyles } from '../utils/reservationStatus';
 
-export default function ReservationViewModal({ isOpen, onClose, reservation, onReservationUpdated }) {
+export default function ReservationViewModal({ isOpen, visible, onClose, reservation, onReservationUpdated }) {
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
+  const open = visible ?? isOpen;
 
   if (!reservation) return null;
 
@@ -24,7 +25,7 @@ export default function ReservationViewModal({ isOpen, onClose, reservation, onR
   };
 
   return (
-    <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
+    <Modal visible={!!open} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           <ScrollView contentContainerStyle={styles.scroll}>

@@ -52,6 +52,10 @@ const reservationService = {
       throw new Error(error.response?.data?.message || error.message);
     }
   },
+
+  async cancelReservation(id) {
+    return this.updateReservation(id, { reservation_state: 'cancelada' });
+  },
 };
 
 export default reservationService;

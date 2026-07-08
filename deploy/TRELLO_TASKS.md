@@ -49,9 +49,11 @@ pnpm trello cards         # ver tarjetas
 
 | Tarjeta | Lista | Asignado |
 |---------|-------|----------|
-| Completar OrderTimerBadge + store detalle pedido | Por hacer | Integrante A |
-| Permisos POST /reservation para rol CLIENTE en backend | Por hacer | Integrante B |
-| Pantallas factura/cupones E2E | Backlog | Integrante A |
+| Completar OrderTimerBadge + store detalle pedido | Listo | Integrante A |
+| Permisos POST /reservation para rol CLIENTE en backend | Listo | Integrante B |
+| Fix crear pedido + cupón en CustomerOrderCreateScreen | Listo | — |
+| Fix modal reservas + filtro user_id + cancelación | Listo | — |
+| Pantallas factura/cupones E2E | Por hacer | Integrante A |
 
 ---
 
@@ -59,11 +61,11 @@ pnpm trello cards         # ver tarjetas
 
 | Tarjeta | Lista | Asignado |
 |---------|-------|----------|
-| Plugin react-native-maps en app.json + permisos ubicación | Por hacer | jsajche-2024380 |
-| CustomerMapaGeneralScreen: geolocalización + marcadores | Por hacer | jsajche-2024380 |
-| CustomerRestaurantMapScreen: mapa por restaurante | Por hacer | jsajche-2024380 |
-| Rutas OSRM (tipo Waze) | Backlog | jsajche-2024380 |
-| Probar en dispositivo físico (GPS real) | Backlog | jsajche-2024380 |
+| Plugin react-native-maps en app.json + permisos ubicación | Listo | jsajche-2024380 |
+| CustomerMapaGeneralScreen: geolocalización + marcadores | Listo | jsajche-2024380 |
+| CustomerRestaurantMapScreen: mapa por restaurante | Listo | jsajche-2024380 |
+| Rutas OSRM (tipo Waze) | Listo | jsajche-2024380 |
+| Probar en dispositivo físico (GPS real) | Por hacer | jsajche-2024380 |
 | Documentar limitaciones web vs nativo | Listo | jsajche-2024380 |
 
 Ver detalle técnico: `client-user-restaurant/docs/MAPAS.md`

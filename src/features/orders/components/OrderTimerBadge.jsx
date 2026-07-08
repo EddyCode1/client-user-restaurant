@@ -3,8 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import useOrderStore from '../../orders/store/useOrderStore';
 import useDetallePedidoStore from '../../detallepedido/store/useDetallePedidoStore';
 
-const MAX_MINUTES = 30;
-
 export default function OrderTimerBadge({ orderId, createdAt, status }) {
   const { fetchDetallePedidosByOrder } = useDetallePedidoStore();
   const { updateOrderStatus } = useOrderStore();
@@ -14,9 +12,10 @@ export default function OrderTimerBadge({ orderId, createdAt, status }) {
   const hasUpdatedRef = useRef(false);
 
   const createdAtDate = useMemo(() => (createdAt ? new Date(createdAt) : null), [createdAt]);
-  const isCompleted = ['completada', 'completado', 'entregada', 'entregado'].includes(String(status || '').toLowerCase());
+  const isCompleted = ['completada', 'completado', 'entregada', 'entregado'].includes(
+    String(status || '').toLowerCase()
+  );
 
-  // Lógica de carga, timer y actualización (Idéntica a la web)
   useEffect(() => {
     const loadDetails = async () => {
       const result = await fetchDetallePedidosByOrder(orderId);
@@ -24,7 +23,7 @@ export default function OrderTimerBadge({ orderId, createdAt, status }) {
       setLoading(false);
     };
     if (orderId) loadDetails();
-  }, [orderId]);
+  }, [orderId, fetchDetallePedidosByOrder]);
 
   useEffect(() => {
     if (!createdAtDate || isCompleted) return;
@@ -32,13 +31,32 @@ export default function OrderTimerBadge({ orderId, createdAt, status }) {
     return () => clearInterval(interval);
   }, [createdAtDate, isCompleted]);
 
-  // Cálculo de tiempos
-  const estimatedMinutes = loading ? 30 : (details.every(d => d?.productType === 'beverage') ? 10 : (details.length > 6 ? 45 : 30));
-  const elapsedSeconds = createdAtDate ? Math.max(0, Math.floor((now - createdAtDate.getTime()) / 1000)) : 0;
-  const percentage = Math.min((elapsedSeconds / (MAX_MINUTES * 60)) * 100, 100);
-  const remaining = Math.max(0, (MAX_MINUTES * 60) - elapsedSeconds);
+  const estimatedMinutes = loading
+    ? 30
+    : details.every((d) => d?.productType === 'beverage')
+      ? 10
+      : details.length > 6
+        ? 45
+        : 30;
+
+  const elapsedSeconds = createdAtDate
+    ? Math.max(0, Math.floor((now - createdAtDate.getTime()) / 1000))
+    : 0;
+  const totalSeconds = estimatedMinutes * 60;
+  const percentage = Math.min((elapsedSeconds / totalSeconds) * 100, 100);
+  const remaining = Math.max(0, totalSeconds - elapsedSeconds);
   const mm = Math.floor(remaining / 60).toString().padStart(2, '0');
   const ss = (remaining % 60).toString().padStart(2, '0');
+
+  useEffect(() => {
+    if (!orderId || !createdAtDate || isCompleted || hasUpdatedRef.current) return;
+    if (elapsedSeconds >= totalSeconds) {
+      hasUpdatedRef.current = true;
+      updateOrderStatus(orderId, 'completada');
+    }
+  }, [orderId, createdAtDate, isCompleted, elapsedSeconds, totalSeconds, updateOrderStatus]);
+
+  const statusLabel = isCompleted || percentage >= 100 ? 'Completada' : 'Preparando';
 
   return (
     <View style={styles.container}>
@@ -47,14 +65,11 @@ export default function OrderTimerBadge({ orderId, createdAt, status }) {
         <Text style={styles.infoText}>{estimatedMinutes} min</Text>
       </View>
 
-      {/* Barra de progreso */}
       <View style={styles.progressBarBackground}>
         <View style={[styles.progressBarFill, { width: `${percentage}%` }]} />
       </View>
 
-      <Text style={styles.statusText}>
-        {createdAtDate && !isCompleted && percentage < 100 ? 'Preparando' : 'Completada'}
-      </Text>
+      <Text style={styles.statusText}>{statusLabel}</Text>
     </View>
   );
 }
@@ -64,22 +79,22 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
   timerText: { fontSize: 12, fontWeight: 'bold', color: '#fff' },
   infoText: { fontSize: 12, color: '#fff' },
-  progressBarBackground: { 
-    height: 12, 
-    borderRadius: 6, 
-    backgroundColor: 'rgba(255,255,255,0.1)', 
-    overflow: 'hidden' 
+  progressBarBackground: {
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    overflow: 'hidden',
   },
-  progressBarFill: { 
-    height: '100%', 
-    borderRadius: 6, 
-    backgroundColor: '#fff' 
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 6,
+    backgroundColor: '#fff',
   },
-  statusText: { 
-    fontSize: 10, 
-    textAlign: 'center', 
-    fontWeight: '600', 
+  statusText: {
+    fontSize: 10,
+    textAlign: 'center',
+    fontWeight: '600',
     marginTop: 4,
-    color: '#000' // O ajusta según el fondo de tu tarjeta
-  }
+    color: '#000',
+  },
 });

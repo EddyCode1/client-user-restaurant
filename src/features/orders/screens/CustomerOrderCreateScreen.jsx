@@ -64,6 +64,8 @@ export default function CustomerOrderCreateScreen() {
       client_name: user?.nombre || user?.name || 'Cliente',
     };
 
+    const result = await saveOrder(payload);
+
     if (result?.success) {
       Alert.alert('Éxito', 'Orden creada con éxito');
       navigation.navigate('OrderDetails', { orderId: result.data._id || result.data.id });
@@ -97,6 +99,25 @@ export default function CustomerOrderCreateScreen() {
             <Picker.Item label="Selecciona un menú..." value="" />
             {filteredMenuOptions.map(m => (
               <Picker.Item key={m._id} label={m.name || m.Menu_Plate} value={m._id} />
+            ))}
+          </Picker>
+        </View>
+
+        <Text style={styles.label}>CUPÓN (OPCIONAL)</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={formData.Orders_cupon}
+            onValueChange={(val) => setFormData(p => ({ ...p, Orders_cupon: val }))}
+            style={{ color: '#fff' }}
+            dropdownIconColor="#fff"
+          >
+            <Picker.Item label="Sin cupón" value="" />
+            {coupons.map((c) => (
+              <Picker.Item
+                key={c._id}
+                label={c.coupon_code || c.Coupon_code || c.name || 'Cupón'}
+                value={c._id}
+              />
             ))}
           </Picker>
         </View>
