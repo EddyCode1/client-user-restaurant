@@ -8,7 +8,7 @@ services:
     environment:
       MONGO_INITDB_DATABASE: gestor_restaurante
     ports:
-      - "27017:27017"
+      - "27018:27017"
     volumes:
       - mongo_data:/data/db
     networks:
@@ -38,7 +38,7 @@ services:
       JWT_ISSUER: ${JWT_ISSUER:-GestorRestaurante}
       JWT_AUDIENCE: ${JWT_AUDIENCE:-GestorRestauranteApp}
     ports:
-      - "3006:3006"
+      - "3016:3006"
     networks:
       - app-network
 
@@ -48,15 +48,15 @@ services:
       dockerfile: Dockerfile
       args:
         EXPO_PUBLIC_DEV_HOST: ${EXPO_PUBLIC_DEV_HOST:-localhost}
-        EXPO_PUBLIC_API_PORT: ${EXPO_PUBLIC_API_PORT:-3006}
-        EXPO_PUBLIC_AUTH_URL: ${EXPO_PUBLIC_AUTH_URL:-http://localhost:3006/GestorRestaurante/v1/auth}
-        EXPO_PUBLIC_API_BASE: ${EXPO_PUBLIC_API_BASE:-http://localhost:3006/GestorRestaurante/v1}
+        EXPO_PUBLIC_API_PORT: ${EXPO_PUBLIC_API_PORT:-3016}
+        EXPO_PUBLIC_AUTH_URL: ${EXPO_PUBLIC_AUTH_URL:-http://localhost:3016/GestorRestaurante/v1/auth}
+        EXPO_PUBLIC_API_BASE: ${EXPO_PUBLIC_API_BASE:-http://localhost:3016/GestorRestaurante/v1}
     container_name: client_user_restaurant
     restart: unless-stopped
     depends_on:
       - node-api
     ports:
-      - "8081:8081"
+      - "8082:8081"
     networks:
       - app-network
 
