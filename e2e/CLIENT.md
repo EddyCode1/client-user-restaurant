@@ -39,7 +39,17 @@ pnpm prebuild && pnpm run:android   # o run:ios
 ## 4) Pedidos
 
 - [ ] Crear pedido desde CustomerOrderCreateScreen
+  - [ ] Seleccionar domicilio
+  - [ ] Seleccionar menú
+  - [ ] Seleccionar cupón (opcional) + validar
+  - [ ] Ver carrito con items (si tiene)
 - [ ] Ver pedido en CustomerOrdersScreen
+  - [ ] Timer cuenta correctamente (mm:ss)
+  - [ ] Barra de progreso avanza
+  - [ ] Si timer falla, mostrar error con botón "Reintentar"
+  - [ ] Orden se marca como completada cuando timer llega a 100%
+  - [ ] Órdenes se actualizan en tiempo real (polling cada 5s)
+- [ ] Navegar a factura + ver detalles
 
 ## 5) Reservas
 

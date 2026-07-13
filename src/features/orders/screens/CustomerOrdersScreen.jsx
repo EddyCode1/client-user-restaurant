@@ -24,7 +24,16 @@ export default function CustomerOrdersScreen() {
   };
 
   useEffect(() => {
+    // Fetch inicial
     fetchOrders();
+
+    // Polling: actualizar órdenes cada 5 segundos
+    const interval = setInterval(() => {
+      fetchOrders();
+    }, 5000);
+
+    // Limpiar interval al desmontar
+    return () => clearInterval(interval);
   }, [fetchOrders]);
 
   const filteredOrders = useMemo(() => {

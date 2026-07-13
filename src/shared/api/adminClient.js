@@ -21,6 +21,7 @@ function attachAuthHeader(client) {
 const publicClient = attachAuthHeader(
     axios.create({
         baseURL: ENDPOINTS.API,
+        timeout: 10000, // 10 segundos timeout para evitar requests indefinidas
         headers: { "Content-Type": "application/json" },
     }),
 );

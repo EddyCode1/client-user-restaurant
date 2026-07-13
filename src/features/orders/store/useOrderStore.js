@@ -77,6 +77,53 @@ const useOrderStore = create((set) => ({
       return { success: false, error: error.response?.data?.message || error.message };
     }
   },
+
+  createOrderDetails: async (orderId, cartItems) => {
+    try {
+      const promises = cartItems.map(item =>
+        adminClient.post('/detallepedido', {
+          order_id: orderId,
+          product_id: item.id,
+          product_type: item.type,
+          quantity: item.quantity,
+          unit_price: item.price,
+        })
+      );
+      await Promise.all(promises);
+      return { success: true };
+    } catch (error) {
+      console.error('Error creating order details:', error);
+      return { success: false, error: error.response?.data?.message || error.message };
+    }
+  },
+
+  saveOrderWithDetails: async (formData, cartItems = []) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await adminClient.post('/order', formData);
+      const order = response.data?.data || response.data;
+
+      if (cartItems && cartItems.length > 0) {
+        const detailsPromises = cartItems.map(item =>
+          adminClient.post('/detallepedido', {
+            order_id: order._id || order.id,
+            product_id: item.id,
+            product_type: item.type,
+            quantity: item.quantity,
+            unit_price: item.price,
+          })
+        );
+        await Promise.all(detailsPromises);
+      }
+
+      set((state) => ({ orders: [order, ...state.orders] }));
+      set({ loading: false });
+      return { success: true, data: order };
+    } catch (error) {
+      set({ error: error.response?.data?.message || error.message, loading: false });
+      return { success: false, error: error.response?.data?.message || error.message };
+    }
+  },
 }));
 
 export default useOrderStore;
