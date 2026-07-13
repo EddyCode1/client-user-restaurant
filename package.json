@@ -19,6 +19,7 @@
     "run:android": "expo run:android",
     "run:ios": "expo run:ios",
     "trello:sync": "node deploy/create-trello-cards.mjs",
+    "trello:sync-code": "node deploy/sync-trello-from-code.mjs",
     "trello:cleanup": "node deploy/trello-cleanup-assign.mjs",
     "trello": "node deploy/trello-cli.mjs"
   },

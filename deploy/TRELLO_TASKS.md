@@ -2,91 +2,59 @@
 
 **Board:** [gestion-de-restaurante](https://trello.com/b/DeIhDyk9/gestion-de-restaurante)
 
-Credenciales en `deploy/.env.trello` (gitignored). Guía completa: [`TRELLO.md`](TRELLO.md)
+Última sync con código: **2026-07-08** (`deploy/sync-trello-from-code.mjs`)
 
 ## Comandos
 
 ```bash
-pnpm trello:sync          # crear tarjetas del proyecto
-pnpm trello lists         # ver columnas
-pnpm trello cards         # ver tarjetas
+pnpm trello:sync-code    # mover tarjetas según main
+node deploy/trello-cli.mjs cards
 ```
 
-## Listas
+---
 
-1. Backlog
-2. Por hacer
-3. En progreso
-4. Revisión
-5. Listo
+## Listo (código verificado en main)
+
+| Tarjeta | Asignado |
+|---------|----------|
+| Infra: docker-compose, seed, babel, auth, detallePedido, README, Docker mobile | — |
+| Mapas: plugin, pantallas, OSRM, docs web vs nativo | jsajche |
+| Push main + deploy/README | jsajche |
+| OrderTimerBadge + detalle pedido | oscar |
+| Flujo pedidos crear + listar | oscar |
+| Permisos POST /reservation CLIENTE (backend) | pablo |
+| Factura/cupones E2E (merge ft/zeta) | zeta |
+| Pantalla reservas listar + crear | zeta |
+| Lista y detalle restaurantes | kevin |
+| MenuViewModal platos/bebidas | jztea |
+| CustomerMenuScreen + useMenuStore | eddy |
+| RegisterScreen + registro CLIENTE | eddy |
+| Fix ContactScreen, start:all, pedidos/reservas | jsajche |
 
 ---
 
-## Infra & arranque
+## Revisión (código listo — falta QA manual equipo)
 
-| Tarjeta | Lista | Asignado |
-|---------|-------|----------|
-| Crear deploy-restaurante/docker-compose.yml | Listo | — |
-| Script start:all en backend | Listo | — |
-| README de arranque nativo + troubleshooting | Listo | — |
-| Seed usuario CLIENTE + menús demo | Listo | — |
+| Tarjeta | Asignado |
+|---------|----------|
+| Probar flujo nativo Android/iOS (`pnpm start:all`) | kevin |
 
 ---
 
-## Cliente — MVP login → menú
+## Pendiente (no terminado en código)
 
-| Tarjeta | Lista | Asignado |
-|---------|-------|----------|
-| Fix babel-preset-expo + commit cambios pendientes | Listo | — |
-| Fix detallePedidoService circular | Listo | — |
-| Fix auth: errores visibles + validar rol antes de login | Listo | — |
-| Probar flujo nativo Android/iOS con dev build | Por hacer | Equipo móvil |
-| Verificar CustomerMenuScreen + useMenuStore | Por hacer | Equipo móvil |
+| Tarjeta | Asignado | Por qué |
+|---------|----------|---------|
+| Probar GPS en dispositivo físico | jsajche | Requiere celular real + dev build con mapas |
+| Actualizar e2e/ADMIN.md para cliente | jztea | Sigue contenido del módulo banco |
+| CI: pnpm build:web en PR | eddy | No hay workflow en .github |
 
 ---
 
-## Órdenes & reservas (fase 2)
+## Mapas — jsajche
 
-| Tarjeta | Lista | Asignado |
-|---------|-------|----------|
-| Completar OrderTimerBadge + store detalle pedido | Listo | Integrante A |
-| Permisos POST /reservation para rol CLIENTE en backend | Listo | Integrante B |
-| Fix crear pedido + cupón en CustomerOrderCreateScreen | Listo | — |
-| Fix modal reservas + filtro user_id + cancelación | Listo | — |
-| Pantallas factura/cupones E2E | Listo | ft/zeta + merge main |
-
----
-
-## Mapas — jsajche-2024380
-
-| Tarjeta | Lista | Asignado |
-|---------|-------|----------|
-| Plugin react-native-maps en app.json + permisos ubicación | Listo | jsajche-2024380 |
-| CustomerMapaGeneralScreen: geolocalización + marcadores | Listo | jsajche-2024380 |
-| CustomerRestaurantMapScreen: mapa por restaurante | Listo | jsajche-2024380 |
-| Rutas OSRM (tipo Waze) | Listo | jsajche-2024380 |
-| Probar en dispositivo físico (GPS real) | Por hacer | jsajche-2024380 |
-| Documentar limitaciones web vs nativo | Listo | jsajche-2024380 |
-
-Ver detalle técnico: `client-user-restaurant/docs/MAPAS.md`
-
----
-
-## Deploy & QA (fase posterior)
-
-| Tarjeta | Lista | Asignado |
-|---------|-------|----------|
-| Docker mobile con EXPO_PUBLIC_* build-args | Listo | — |
-| Actualizar e2e/ADMIN.md para restaurante cliente | Backlog | QA |
-| CI: pnpm build:web en PR | Backlog | DevOps |
-
----
-
-## CLI Trello (cuando tengas token)
-
-```bash
-# Ejemplo con trello-cli (npm i -g trello-cli)
-trello addcard --board "Cliente Restaurante" --list "Por hacer" \
-  --title "Probar flujo nativo Android/iOS" \
-  --desc "Login cliente@restaurante.com → pestaña Menú"
-```
+| Tarea | Estado |
+|-------|--------|
+| Plugin + pantallas + OSRM | Listo |
+| GPS dispositivo físico | Pendiente |
+| `pnpm rebuild:native` / `start:all` para mapa en emulador | Revisión QA |

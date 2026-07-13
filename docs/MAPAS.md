@@ -14,7 +14,8 @@
 ## Tareas
 
 ### 1. Configuración nativa
-- [x] `react-native-maps` instalado + permisos ubicación en `app.json`
+- [x] `react-native-maps` en `package.json` (autolinking vía `expo prebuild` / dev build; **no** va en `plugins` de `app.json`)
+- [x] Permisos ubicación en `app.json` + plugin `expo-location`
 - [x] Split web/native (`MapViewCompat.*`) para `expo export --platform web`
 - [ ] Google Maps API key en producción (opcional)
 - [ ] Probar permisos en dispositivo físico
