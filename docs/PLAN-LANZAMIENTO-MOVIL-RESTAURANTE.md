@@ -211,12 +211,15 @@ pnpm dev   # en otra terminal, desde client-user-restaurant
 
 ## 9. Definición de Done (DoD) — cierre proyecto móvil
 
-- [ ] Todos los epics A–E en código mergeados a `main`
-- [ ] `e2e/CLIENT.md` 100% marcado por al menos 2 personas del equipo
-- [ ] Sin pantallas "Próximamente" en rutas activas
-- [ ] Trello sync: solo Backlog = GPS físico + mejoras opcionales
-- [ ] Push `main` sin `Co-authored-by: Cursor`
-- [ ] Guía exposición compartida al equipo
+- [x] Epics A–E en código mergeados a `main` (carrito, reseñas, filtro pedidos, mapas, reservas UX)
+- [ ] `e2e/CLIENT.md` 100% marcado por el equipo (QA manual)
+- [x] Sin pantallas "Próximamente" en rutas activas (reseñas implementadas)
+- [x] Editar reserva desde modal → CreateReservation
+- [x] Registro con auto-login CLIENTE
+- [ ] Trello sync: GPS físico + API key mapas = único backlog real
+- [x] Push `main` sin `Co-authored-by: Cursor`
+- [x] Plan lanzamiento en `docs/PLAN-LANZAMIENTO-MOVIL-RESTAURANTE.md`
+- [ ] CI GitHub Actions (plantilla en `deploy/templates/build-web.yml`; PAT sin scope `workflow`)
 
 ---
 
