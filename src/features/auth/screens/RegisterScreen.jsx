@@ -9,12 +9,23 @@ import { authService } from '../../../shared/api/services/authService';
  */
 const RegisterScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { control, handleSubmit, watch, formState: { errors } } = useForm();
+  const { control, handleSubmit, watch, formState: { errors } } = useForm({
+    defaultValues: {
+      nombre: '',
+      username: '',
+      email: '',
+      telefono: '',
+      password: '',
+      confirmPassword: '',
+    }
+  });
   const password = watch('password');
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
+      console.log('Submitting registration with:', { nombre: data.nombre, username: data.username, email: data.email, telefono: data.telefono });
+      
       const res = await authService.register({
         nombre: data.nombre,
         username: data.username,
@@ -23,13 +34,19 @@ const RegisterScreen = ({ navigation }) => {
         password: data.password,
       });
 
+      console.log('Registration response:', res);
+
       if (res.success) {
+        console.log('Registration successful, navigating to Login');
         Alert.alert('Éxito', 'Cuenta creada exitosamente');
         navigation.navigate('Login');
+      } else {
+        console.log('Registration failed:', res.error);
+        Alert.alert('Error', res.error || 'No se pudo crear la cuenta');
       }
     } catch (err) {
+      console.error('Registration exception:', err);
       Alert.alert('Error', 'No se pudo crear la cuenta, intenta de nuevo');
-      console.error(err);
     } finally {
       setIsLoading(false);
     }
