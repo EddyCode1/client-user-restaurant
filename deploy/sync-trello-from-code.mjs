@@ -45,6 +45,14 @@ const DONE = [
     note: 'merge ft/kevin e2267d8: validaciones registro + errores authService. QA E2E pendiente.',
   },
   {
+    match: 'CI: pnpm build:web',
+    note: '.github/workflows/build-web.yml en PR a main. build:web verificado.',
+  },
+  {
+    match: 'Actualizar e2e/ADMIN.md',
+    note: 'e2e/ADMIN.md reescrito para cliente restaurante (sin banco).',
+  },
+  {
     match: '[Cliente] Push main',
     note: 'main unificado: ft/oscar, ft/eddy, ft/kevin, ft/zeta, mapas, deploy. b776ccd',
   },
@@ -86,6 +94,21 @@ const NEW_LISTO = [
   {
     name: 'Merge ft/oscar + ft/eddy + ft/kevin en main',
     desc: 'Pedidos/timer (oscar), menú/JWT (eddy), registro (kevin). main b776ccd',
+    member: 'jsajche2024380',
+  },
+  {
+    name: 'Carrito global menú → pedido (Zustand)',
+    desc: 'useCartStore + MenuViewModal agregar + CartCheckoutCTA. Epic A1.',
+    member: 'jsajche2024380',
+  },
+  {
+    name: 'Reseñas cliente (listar + crear)',
+    desc: 'CustomerReviewsScreen + reviewService POST/GET /review. Epic B1.',
+    member: 'jsajche2024380',
+  },
+  {
+    name: 'Filtro órdenes por User_id (CLIENTE)',
+    desc: 'Mobile + backend: cliente solo ve sus pedidos. Epic A2.',
     member: 'jsajche2024380',
   },
 ];

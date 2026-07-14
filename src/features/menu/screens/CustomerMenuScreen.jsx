@@ -4,6 +4,7 @@ import useMenuStore from '../../menus/store/useMenuStore';
 import useRestaurantStore from '../../restaurant/store/useRestaurantStore';
 import { MenuViewModal } from '../components/MenuViewModal';
 import CustomerMenuList from '../components/CustomerMenuList';
+import CartCheckoutCTA from '../../detallepedido/components/CartCheckoutCTA';
 
 export default function CustomerMenuScreen() {
   const { menus, fetchMenus, loading } = useMenuStore();
@@ -73,13 +74,15 @@ export default function CustomerMenuScreen() {
         onClose={() => setIsViewModalOpen(false)}
         menu={selectedMenu}
       />
+
+      <CartCheckoutCTA />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#111' },
-  content: { flex: 1, padding: 20 },
+  content: { flex: 1, padding: 20, paddingBottom: 100 },
   header: { marginBottom: 20 },
   preTitle: { fontSize: 10, fontWeight: '900', color: '#9ca3af', letterSpacing: 3 },
   title: { fontSize: 28, fontWeight: '900', color: '#fff', marginTop: 8 },

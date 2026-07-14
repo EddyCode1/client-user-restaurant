@@ -22,7 +22,7 @@ export default function CustomerOrderCreateScreen() {
   const { menus, fetchMenus } = useMenuStore();
   const { coupons, fetchCoupons } = useCouponStore();
   const { saveOrderWithDetails, loading } = useOrderStore();
-  const { cart, removeItem } = useCart();
+  const { cart, removeItem, clearCart, subtotal, restaurantId: cartRestaurantId, restaurantName: cartRestaurantName } = useCart();
 
   const [formData, setFormData] = useState({ Orders_domicile: '', Orders_cupon: '', Menu_id: '' });
   const [restaurantContext, setRestaurantContext] = useState({ id: '', name: '' });
@@ -47,6 +47,14 @@ export default function CustomerOrderCreateScreen() {
       });
     }
   }, [routeRestaurantId]);
+
+  useEffect(() => {
+    if (routeRestaurantId || !cartRestaurantId) return;
+    setRestaurantContext((prev) => ({
+      id: prev.id || cartRestaurantId,
+      name: prev.name || cartRestaurantName || '',
+    }));
+  }, [cartRestaurantId, cartRestaurantName, routeRestaurantId]);
 
   const filteredMenuOptions = useMemo(() => {
     return menus.filter(m => String(m.restaurant_id || m.Restaurant_id) === restaurantContext.id);
@@ -115,12 +123,10 @@ export default function CustomerOrderCreateScreen() {
       client_name: user?.nombre || user?.name || 'Cliente',
     };
 
-    // Usar saveOrderWithDetails si hay items en el carrito, si no, usar saveOrder directamente
-    const result = cart.length > 0 
-      ? await saveOrderWithDetails(payload, cart)
-      : await saveOrderWithDetails(payload, []);
+    const result = await saveOrderWithDetails(payload, cart);
 
     if (result?.success) {
+      clearCart();
       Alert.alert('Éxito', 'Orden creada con éxito');
       navigation.navigate('OrderDetails', { orderId: result.data._id || result.data.id });
     } else {
@@ -206,7 +212,7 @@ export default function CustomerOrderCreateScreen() {
                 </View>
               )}
             />
-            <Text style={styles.cartSubtotal}>Subtotal: Q{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</Text>
+            <Text style={styles.cartSubtotal}>Subtotal: Q{subtotal.toFixed(2)}</Text>
           </View>
         )}
 

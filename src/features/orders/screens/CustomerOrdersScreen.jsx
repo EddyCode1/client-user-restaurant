@@ -8,11 +8,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAuthStore } from '../../../shared/store/authStore';
 import useOrderStore from '../../orders/store/useOrderStore';
 import OrderTimerBadge from '../components/OrderTimerBadge';
 
 export default function CustomerOrdersScreen() {
   const navigation = useNavigation();
+  const user = useAuthStore((state) => state.user);
   const { orders, loading, fetchOrders } = useOrderStore();
   const [activeTab, setActiveTab] = useState('Todas');
 
@@ -34,7 +36,7 @@ export default function CustomerOrdersScreen() {
 
     // Limpiar interval al desmontar
     return () => clearInterval(interval);
-  }, [fetchOrders]);
+  }, [fetchOrders, user?._id, user?.id]);
 
   const filteredOrders = useMemo(() => {
     if (activeTab === 'En Proceso') {

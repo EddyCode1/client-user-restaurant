@@ -9,7 +9,9 @@ import {
   Modal,
   ActivityIndicator,
   Alert,
+  Platform,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
@@ -28,6 +30,19 @@ const toIsoDate = (dateStr) => {
   return Number.isNaN(parsed.getTime()) ? dateStr : parsed.toISOString();
 };
 
+const formatDate = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
+const formatTime = (date) => {
+  const h = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  return `${h}:${min}`;
+};
+
 export default function CustomerReservationCreateScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -42,6 +57,14 @@ export default function CustomerReservationCreateScreen() {
   const [loadingTables, setLoadingTables] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const [pickerDate, setPickerDate] = useState(() => {
+    const d = new Date();
+    d.setHours(19, 0, 0, 0);
+    return d;
+  });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
   const [formData, setFormData] = useState({
     reservation_date: '',
     reservation_time: '19:00',
@@ -51,6 +74,31 @@ export default function CustomerReservationCreateScreen() {
     reservation_price: '0',
     notes: '',
   });
+
+  const syncPickerDate = (date) => {
+    setPickerDate(date);
+    setFormData((prev) => ({
+      ...prev,
+      reservation_date: formatDate(date),
+      reservation_time: formatTime(date),
+    }));
+  };
+
+  const onDateChange = (event, date) => {
+    if (Platform.OS === 'android') setShowDatePicker(false);
+    if (event.type === 'dismissed' || !date) return;
+    const next = new Date(pickerDate);
+    next.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+    syncPickerDate(next);
+  };
+
+  const onTimeChange = (event, date) => {
+    if (Platform.OS === 'android') setShowTimePicker(false);
+    if (event.type === 'dismissed' || !date) return;
+    const next = new Date(pickerDate);
+    next.setHours(date.getHours(), date.getMinutes(), 0, 0);
+    syncPickerDate(next);
+  };
 
   useEffect(() => {
     const initData = async () => {
@@ -154,23 +202,35 @@ export default function CustomerReservationCreateScreen() {
       />
 
       <View style={styles.card}>
-        <Text style={styles.label}>FECHA (YYYY-MM-DD)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="2026-07-10"
-          placeholderTextColor="#6b7280"
-          value={formData.reservation_date}
-          onChangeText={(val) => setFormData({ ...formData, reservation_date: val })}
-        />
+        <Text style={styles.label}>FECHA</Text>
+        <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
+          <Text style={styles.pickerValue}>
+            {formData.reservation_date || 'Seleccionar fecha'}
+          </Text>
+        </TouchableOpacity>
+        {showDatePicker ? (
+          <DateTimePicker
+            value={pickerDate}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            minimumDate={new Date()}
+            onChange={onDateChange}
+          />
+        ) : null}
 
-        <Text style={styles.label}>HORA (HH:MM)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="19:00"
-          placeholderTextColor="#6b7280"
-          value={formData.reservation_time}
-          onChangeText={(val) => setFormData({ ...formData, reservation_time: val })}
-        />
+        <Text style={styles.label}>HORA</Text>
+        <TouchableOpacity style={styles.input} onPress={() => setShowTimePicker(true)}>
+          <Text style={styles.pickerValue}>{formData.reservation_time || 'Seleccionar hora'}</Text>
+        </TouchableOpacity>
+        {showTimePicker ? (
+          <DateTimePicker
+            value={pickerDate}
+            mode="time"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            is24Hour
+            onChange={onTimeChange}
+          />
+        ) : null}
 
         <Text style={styles.label}>PERSONAS</Text>
         <TextInput
@@ -251,6 +311,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 15,
   },
+  pickerValue: { color: '#fff', fontSize: 16 },
   notes: { minHeight: 80, textAlignVertical: 'top' },
   pickerWrap: { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 8, marginBottom: 15 },
   picker: { color: '#fff' },

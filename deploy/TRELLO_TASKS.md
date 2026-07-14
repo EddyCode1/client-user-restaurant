@@ -2,73 +2,66 @@
 
 **Board:** [gestion-de-restaurante](https://trello.com/b/DeIhDyk9/gestion-de-restaurante)
 
-Última sync con código: **2026-07-13** (`deploy/sync-trello-from-code.mjs`)
+Última sync con código: **2026-07-13** (cierre MVP — epics A–E)
+
+**Plan completo:** [`docs/PLAN-LANZAMIENTO-MOVIL-RESTAURANTE.md`](../docs/PLAN-LANZAMIENTO-MOVIL-RESTAURANTE.md)
 
 ## Comandos
 
 ```bash
-pnpm trello:sync-code    # mover tarjetas según main
+pnpm trello:sync-code
 node deploy/trello-cli.mjs cards
 ```
 
 ---
 
-## Listo (código verificado en main — `b776ccd`)
+## Listo (código en main)
 
-| Tarjeta | Asignado | Merge / commit |
-|---------|----------|----------------|
-| Infra: docker-compose, seed, babel, auth, detallePedido, README, Docker mobile | — | main |
-| Mapas: pantallas, OSRM, autolinking (sin plugin) | jsajche | c93868b |
-| Push main + deploy/README | jsajche | b776ccd |
-| OrderTimerBadge + detalle pedido | oscar | **ft/oscar** `c266f1b` |
-| Flujo pedidos crear + listar | oscar | **ft/oscar** `c266f1b` |
-| Permisos POST /reservation CLIENTE (backend) | pablo | backend main |
-| Factura/cupones E2E | zeta | **ft/zeta** `4c712e0` |
-| Pantalla reservas listar + crear | zeta | **ft/zeta** `4c712e0` |
-| Lista y detalle restaurantes | kevin | main |
-| MenuViewModal platos/bebidas | jztea | main `12f8bc3` |
-| CustomerMenuScreen + useMenuStore | eddy | **ft/eddy** `b9c04cc` |
-| RegisterScreen + registro CLIENTE | kevin | **ft/kevin** `e2267d8` |
-| Fix auth JWT + errores visibles | eddy | **ft/eddy** `b9c04cc` |
-| Fix ContactScreen, start:all, pedidos/reservas | jsajche | main |
+| Epic | Tarjeta | Responsable |
+|------|---------|-------------|
+| Infra | docker-compose, seed, start:all, deploy | jsajche |
+| Mapas | pantallas OSRM, autolinking, app.config Google key | jsajche |
+| Pedidos | OrderTimerBadge, flujo crear/listar, **carrito Zustand** | oscar + jsajche |
+| Pedidos | **Filtro User_id** solo pedidos del cliente | jsajche |
+| Auth | JWT, menú, RegisterScreen | eddy + kevin |
+| Reservas / factura | zeta merge + DatePicker reservas | zeta + jsajche |
+| Reseñas | listar + crear reseña | jsajche |
+| Higiene | logo Omakase, e2e CLIENT/ADMIN, CI build:web | jsajche + eddy |
+| Backend | filtro órdenes CLIENTE | jsajche |
 
-### Ramas integradas en main
-
-| Rama | Estado |
-|------|--------|
-| `ft/oscar` | Mergeado |
-| `ft/eddy` | Mergeado |
-| `ft/kevin` | Mergeado |
-| `ft/zeta` | Mergeado (antes) |
+Ramas `ft/oscar`, `ft/eddy`, `ft/kevin`, `ft/zeta` → **mergeadas**.
 
 ---
 
-## Revisión (código listo — falta QA manual equipo)
+## Revisión (QA manual — equipo)
 
 | Tarjeta | Asignado |
 |---------|----------|
-| Probar flujo nativo Android/iOS (`pnpm start:all`) | kevin |
-| Registro CLIENTE E2E (nuevo usuario) | kevin |
-| Menú + JWT en emulador | eddy |
-| Timer pedidos + reintentar detalle | oscar |
+| Probar flujo nativo (`pnpm start:all`) | kevin |
+| Carrito menú → pedido → factura | oscar |
+| Registro nuevo usuario | kevin |
+| Menú + JWT | eddy |
+| Reservas + cupones + PDF | zeta |
+| Mapas dev build + GPS físico | jsajche |
+
+Checklist: `e2e/CLIENT.md`
 
 ---
 
-## Pendiente (no terminado en código)
+## Pendiente real
 
-| Tarjeta | Asignado | Por qué |
-|---------|----------|---------|
-| Probar GPS en dispositivo físico | jsajche | Requiere celular real + dev build con mapas |
-| Actualizar e2e/ADMIN.md para cliente | jztea | Sigue contenido del módulo banco |
-| CI: pnpm build:web en PR | eddy | No hay workflow en .github |
-| Google Maps API key Android (mapa gris) | jsajche | Opcional para producción |
+| Tarjeta | Por qué |
+|---------|---------|
+| GPS dispositivo físico | Requiere celular + dev build |
+| Google Maps API key en `.env` | Opcional; sin key mapa gris en Android |
+| Editar reserva desde UI | Código parcial (Epic D2) |
 
 ---
 
-## Mapas — jsajche
+## Mapas
 
 | Tarea | Estado |
 |-------|--------|
-| Pantallas + OSRM + autolinking | Listo |
-| GPS dispositivo físico | Pendiente |
-| `pnpm rebuild:native` / `start:all` para mapa en emulador | Revisión QA |
+| Pantallas + OSRM + app.config | Listo |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Configurar en `.env` + rebuild |
+| GPS físico | Pendiente QA |

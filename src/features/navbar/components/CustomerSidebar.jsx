@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Animated, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthStore } from '../../../shared/store/authStore';
-import logoRestaurant from '../../../../assets/bank-logo.png';
+import logoRestaurant from '../../../../assets/icon.png';
 
 const SIDEBAR_WIDTH = 288;
 

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import PropTypes from 'prop-types';
 import { getDishByIdService, getDishesByRestaurantService } from '../../dishes/services/DishService';
 import { getBeverageByIdService, getBeveragesByRestaurantService } from '../../beverages/services/beverageService';
 import { restaurantService } from '../../restaurant/services/restaurantService';
+import { useCart } from '../../detallepedido/hooks/useCart';
 
 const asId = (value) => {
   if (!value) return null;
@@ -12,12 +13,14 @@ const asId = (value) => {
 };
 
 const normalizeDish = (item) => ({
+  _id: item?._id || item?.id || null,
   Menu_Plate: item?.Menu_Plate || item?.name || item?.plate || 'Plato',
   Menu_Price: item?.Menu_Price ?? item?.price ?? 0,
   Menu_description_plate: item?.Menu_description_plate || item?.description || '',
 });
 
 const normalizeBeverage = (item) => ({
+  _id: item?._id || item?.id || null,
   name: item?.Menu_Drink || item?.name || item?.beverage_name || 'Bebida',
   Menu_Price: item?.Menu_Price ?? item?.price ?? 0,
   Menu_type_drink: item?.Menu_type_drink || item?.type || '',
@@ -61,10 +64,26 @@ const resolveItems = async (items, fetchById, normalize) => {
 };
 
 export const MenuViewModal = ({ isOpen, onClose, menu }) => {
+  const { addItem } = useCart();
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [resolvedDishes, setResolvedDishes] = useState([]);
   const [resolvedBeverages, setResolvedBeverages] = useState([]);
   const [restaurantName, setRestaurantName] = useState('');
+  const [restaurantId, setRestaurantId] = useState(null);
+
+  const restaurantContext = useMemo(
+    () => ({ id: restaurantId, name: restaurantName }),
+    [restaurantId, restaurantName]
+  );
+
+  const handleAddToCart = (item, type) => {
+    if (!item?._id) {
+      Alert.alert('No disponible', 'Este producto no se puede agregar al carrito.');
+      return;
+    }
+    addItem(item, type, restaurantContext);
+    Alert.alert('Agregado', `${item.Menu_Plate || item.name} agregado al carrito.`);
+  };
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -98,6 +117,7 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
         }
       }
       setRestaurantName(name);
+      setRestaurantId(restaurantId ? String(restaurantId) : null);
 
       const embeddedDishes = menu?.dishes || menu?.Dishes || menu?.platos || [];
       const embeddedBeverages = menu?.beverages || menu?.Beverages || menu?.bebidas || [];
@@ -164,7 +184,7 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                     <Text style={styles.empty}>Sin platos registrados</Text>
                   ) : (
                     resolvedDishes.map((dish, i) => (
-                      <View key={`dish-${i}`} style={styles.item}>
+                      <View key={`dish-${dish._id || i}`} style={styles.item}>
                         <View style={styles.row}>
                           <Text style={styles.itemName}>{dish.Menu_Plate}</Text>
                           <Text style={styles.itemPrice}>Q{Number(dish.Menu_Price || 0).toFixed(2)}</Text>
@@ -172,6 +192,12 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                         {dish.Menu_description_plate ? (
                           <Text style={styles.itemDesc}>{dish.Menu_description_plate}</Text>
                         ) : null}
+                        <TouchableOpacity
+                          style={styles.addButton}
+                          onPress={() => handleAddToCart(dish, 'dish')}
+                        >
+                          <Text style={styles.addButtonText}>Agregar al carrito</Text>
+                        </TouchableOpacity>
                       </View>
                     ))
                   )}
@@ -183,7 +209,7 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                     <Text style={styles.empty}>Sin bebidas registradas</Text>
                   ) : (
                     resolvedBeverages.map((bev, i) => (
-                      <View key={`bev-${i}`} style={styles.item}>
+                      <View key={`bev-${bev._id || i}`} style={styles.item}>
                         <View style={styles.row}>
                           <Text style={styles.itemName}>{bev.name}</Text>
                           {bev.Menu_Price ? (
@@ -193,6 +219,12 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                         {bev.Menu_type_drink ? (
                           <Text style={styles.itemDesc}>{bev.Menu_type_drink}</Text>
                         ) : null}
+                        <TouchableOpacity
+                          style={styles.addButton}
+                          onPress={() => handleAddToCart(bev, 'beverage')}
+                        >
+                          <Text style={styles.addButtonText}>Agregar al carrito</Text>
+                        </TouchableOpacity>
                       </View>
                     ))
                   )}
@@ -243,6 +275,15 @@ const styles = StyleSheet.create({
   itemName: { fontWeight: 'bold', flex: 1 },
   itemPrice: { fontWeight: 'bold' },
   itemDesc: { fontSize: 11, color: '#666', marginTop: 2 },
+  addButton: {
+    marginTop: 8,
+    alignSelf: 'flex-start',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#111',
+  },
+  addButtonText: { fontSize: 10, fontWeight: 'bold', letterSpacing: 1 },
   empty: { fontSize: 12, color: '#888', textAlign: 'center', fontStyle: 'italic' },
 });
 

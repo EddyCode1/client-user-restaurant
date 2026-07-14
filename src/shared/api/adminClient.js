@@ -1,6 +1,5 @@
 import axios from "axios";
 import { ENDPOINTS } from "../constants/endpoints";
-import bankingClient from "./bankingClient";
 import authClient from "./authClient";
 import { useAuthStore } from "../store/authStore";
 import { getRefreshToken, setRefreshToken } from "../storage/secureStorage";
@@ -76,5 +75,5 @@ publicClient.interceptors.response.use(
 
 const adminClient = publicClient;
 
-export { bankingClient, publicClient, authClient };
+export { publicClient, authClient };
 export default adminClient;

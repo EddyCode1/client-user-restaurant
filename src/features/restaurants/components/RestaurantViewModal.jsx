@@ -52,7 +52,7 @@ export default function RestaurantViewModal({ isOpen, onClose, restaurant }) {
               <TouchableOpacity onPress={() => handlePress(null, 'TableLayout')}>
                 <Text style={styles.menuItem}>DISTRIBUCIÓN MESAS</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handlePress(null, 'Reviews')}>
+              <TouchableOpacity onPress={() => handlePress(null, 'Reviews', true)}>
                 <Text style={styles.menuItem}>RESEÑAS</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handlePress(null, 'CreateReservation', true)}>
