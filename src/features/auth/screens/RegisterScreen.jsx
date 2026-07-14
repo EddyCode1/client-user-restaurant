@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { authService } from '../../../shared/api/services/authService';
+import { useAuthStore } from '../../../shared/store/authStore';
+import { isClientRole } from '../../../shared/auth/roles';
 
 /**
  * RegisterScreen
@@ -21,11 +23,11 @@ const RegisterScreen = ({ navigation }) => {
   });
   const password = watch('password');
 
+  const { login } = useAuthStore();
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      console.log('Submitting registration with:', { nombre: data.nombre, username: data.username, email: data.email, telefono: data.telefono });
-      
       const res = await authService.register({
         nombre: data.nombre,
         username: data.username,
@@ -34,18 +36,25 @@ const RegisterScreen = ({ navigation }) => {
         password: data.password,
       });
 
-      console.log('Registration response:', res);
-
       if (res.success) {
-        console.log('Registration successful, navigating to Login');
-        Alert.alert('Éxito', 'Cuenta creada exitosamente');
-        navigation.navigate('Login');
+        const loginResult = await authService.login(data.email, data.password);
+        const role = loginResult.user?.rol || loginResult.user?.role;
+        if (loginResult.success && loginResult.token && isClientRole(role)) {
+          await login(
+            loginResult.token,
+            loginResult.user,
+            loginResult.refreshToken,
+            loginResult.expiresAt,
+          );
+          Alert.alert('Éxito', 'Cuenta creada. ¡Bienvenido!');
+        } else {
+          Alert.alert('Éxito', 'Cuenta creada. Inicia sesión con tu correo.');
+          navigation.navigate('Login');
+        }
       } else {
-        console.log('Registration failed:', res.error);
         Alert.alert('Error', res.error || 'No se pudo crear la cuenta');
       }
-    } catch (err) {
-      console.error('Registration exception:', err);
+    } catch {
       Alert.alert('Error', 'No se pudo crear la cuenta, intenta de nuevo');
     } finally {
       setIsLoading(false);

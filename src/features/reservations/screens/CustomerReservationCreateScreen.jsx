@@ -116,7 +116,48 @@ export default function CustomerReservationCreateScreen() {
       if (restRaw) setRestaurantContext(JSON.parse(restRaw));
     };
     initData();
-  }, [routeRestaurantId]);
+  }, [routeRestaurantId, editingReservation]);
+
+  useEffect(() => {
+    if (!editingReservation) return;
+
+    const dateRaw = editingReservation.reservation_date || editingReservation.fecha;
+    const timeRaw = editingReservation.reservation_time || editingReservation.hora || '19:00';
+    const restaurantId =
+      editingReservation.restaurant_id ||
+      editingReservation.restaurant?._id ||
+      editingReservation.restaurant?.id;
+
+    if (restaurantId) {
+      setRestaurantContext({
+        id: String(restaurantId),
+        name:
+          editingReservation.restaurant_name ||
+          editingReservation.restaurant?.name ||
+          '',
+      });
+    }
+
+    let nextPicker = new Date();
+    if (dateRaw) {
+      const parsed = new Date(dateRaw);
+      if (!Number.isNaN(parsed.getTime())) nextPicker = parsed;
+    }
+    const [hh, mm] = String(timeRaw).split(':').map(Number);
+    if (!Number.isNaN(hh)) nextPicker.setHours(hh, Number.isNaN(mm) ? 0 : mm, 0, 0);
+
+    setPickerDate(nextPicker);
+    setFormData((prev) => ({
+      ...prev,
+      reservation_date: formatDate(nextPicker),
+      reservation_time: formatTime(nextPicker),
+      personas: String(editingReservation.personas || editingReservation.number_of_people || prev.personas),
+      table_id: editingReservation.table_id || editingReservation.table?._id || prev.table_id,
+      reservation_type: editingReservation.reservation_type || prev.reservation_type,
+      reservation_price: String(editingReservation.reservation_price ?? prev.reservation_price),
+      notes: editingReservation.reservation_history || editingReservation.notes || prev.notes,
+    }));
+  }, [editingReservation]);
 
   useEffect(() => {
     const loadTables = async () => {
@@ -181,6 +222,7 @@ export default function CustomerReservationCreateScreen() {
     try {
       if (isEditing && editingReservation?._id) {
         await reservationService.updateReservation(editingReservation._id, payload);
+        await AsyncStorage.removeItem(EDITING_RESERVATION_KEY);
         Alert.alert('Éxito', 'Reservación actualizada');
       } else {
         await reservationService.createReservation(payload);

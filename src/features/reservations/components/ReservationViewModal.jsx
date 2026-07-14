@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import reservationService from '../../../shared/api/services/reservationService';
 import { getReservationDisplayStatus, getReservationStatusStyles } from '../utils/reservationStatus';
 
 export default function ReservationViewModal({ isOpen, visible, onClose, reservation, onReservationUpdated }) {
+  const navigation = useNavigation();
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
   const open = !!(visible ?? isOpen);
 
@@ -62,6 +64,15 @@ export default function ReservationViewModal({ isOpen, visible, onClose, reserva
 
             {canModify && (
               <View style={styles.actions}>
+                <TouchableOpacity
+                  onPress={() => {
+                    onClose();
+                    navigation.navigate('CreateReservation', { reservation });
+                  }}
+                  style={styles.btnEdit}
+                >
+                  <Text style={styles.btnEditText}>EDITAR RESERVACIÓN</Text>
+                </TouchableOpacity>
                 {showCancelPrompt ? (
                   <View style={styles.promptBox}>
                     <Text style={styles.promptText}>¿Deseas cancelar esta reservación?</Text>
@@ -103,6 +114,8 @@ const styles = StyleSheet.create({
   statusBadge: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 20, marginTop: 5 },
   statusText: { fontSize: 10, fontWeight: '900', color: '#000' },
   actions: { marginTop: 20, borderTopWidth: 1, borderColor: '#374151', paddingTop: 20 },
+  btnEdit: { backgroundColor: 'rgba(255,255,255,0.1)', padding: 15, borderRadius: 12, alignItems: 'center', marginBottom: 12 },
+  btnEditText: { color: '#fff', fontWeight: 'bold' },
   btnDanger: { backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: 15, borderRadius: 12, alignItems: 'center' },
   btnDangerText: { color: '#ef4444', fontWeight: 'bold' },
   promptBox: { backgroundColor: '#fee2e2', padding: 15, borderRadius: 12 },

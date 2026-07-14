@@ -14,6 +14,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "build:web": "expo export --platform web",
+    "ci:web": "pnpm build:web",
     "serve:web": "serve dist -l 8081 -s",
     "prebuild": "expo prebuild",
     "run:android": "expo run:android",

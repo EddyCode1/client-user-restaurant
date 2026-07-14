@@ -53,8 +53,8 @@ Checklist: `e2e/CLIENT.md`
 | Tarjeta | Por qué |
 |---------|---------|
 | GPS dispositivo físico | Requiere celular + dev build |
-| Google Maps API key en `.env` | Opcional; sin key mapa gris en Android |
-| Editar reserva desde UI | Código parcial (Epic D2) |
+| Google Maps API key en `.env` | Poner key + `pnpm rebuild:native` |
+| CI workflow en GitHub | PAT necesita scope `workflow` para subir `.github/` |
 
 ---
 
