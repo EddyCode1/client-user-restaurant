@@ -30,7 +30,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
 
-      login(result.token, result.user, result.refreshToken);
+      login(result.token, result.user, result.refreshToken, result.expiresAt);
     } catch (err) {
       Alert.alert('Error', 'No se pudo conectar con el servidor');
       console.error(err);

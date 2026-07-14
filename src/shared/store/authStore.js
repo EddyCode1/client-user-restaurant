@@ -11,15 +11,17 @@ export const useAuthStore = create(
         (set, get) => ({
             token: null,
             user: null,
+            expiresAt: null,
             isAuthenticated: false,
             _hasHydrated: false,
 
             setHasHydrated: (state) => set({ _hasHydrated: state }),
 
-            login: async (accessToken, user, refreshToken) => {
+            login: async (accessToken, user, refreshToken, expiresAt) => {
                 set({
                     token: accessToken,
                     user,
+                    expiresAt: expiresAt || null,
                     isAuthenticated: true,
                 });
                 if (refreshToken) {
@@ -28,6 +30,8 @@ export const useAuthStore = create(
             },
 
             setAccessToken: (token) => set({ token }),
+
+            setExpiresAt: (expiresAt) => set({ expiresAt }),
 
             patchUser: (partial) =>
                 set((state) => {
@@ -42,6 +46,7 @@ export const useAuthStore = create(
                 set({
                     token: null,
                     user: null,
+                    expiresAt: null,
                     isAuthenticated: false,
                 });
                 await deleteRefreshToken();

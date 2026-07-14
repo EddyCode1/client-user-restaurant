@@ -1,16 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Animated } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Animated, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthStore } from '../../../shared/store/authStore';
 import logoRestaurant from '../../../../assets/bank-logo.png';
 
+const SIDEBAR_WIDTH = 288;
+
 const CustomerSidebar = ({ isOpen = true }) => {
   const navigation = useNavigation();
   const { logout, user } = useAuthStore();
+  const translateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
+
+  useEffect(() => {
+    Animated.timing(translateX, {
+      toValue: isOpen ? 0 : -SIDEBAR_WIDTH,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [isOpen, translateX]);
 
   const handleLogout = () => {
     logout();
-    // En React Navigation, la navegación al login suele ser sustituida
     navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
   };
 
@@ -18,19 +28,16 @@ const CustomerSidebar = ({ isOpen = true }) => {
     { label: 'Menú Principal', path: 'CustomerHome' },
     { label: 'Restaurantes', path: 'Restaurants' },
     { label: 'Mapa General', path: 'MapaGeneral' },
-    { label: 'Mesas', path: 'Tables' },
+    { label: 'Mesas', path: 'TableLayout' },
     { label: 'Menú', path: 'Menu' },
     { label: 'Cupones', path: 'Coupons' },
     { label: 'Órdenes', path: 'Orders' },
     { label: 'Factura', path: 'Factura' },
-    { label: 'Mi Perfil', path: 'Profile' },
+    { label: 'Reservaciones', path: 'Reservations' },
   ];
 
-  if (!isOpen) return null;
-
   return (
-    <View style={styles.sidebar}>
-      {/* Logo y Encabezado */}
+    <Animated.View style={[styles.sidebar, { transform: [{ translateX }] }]}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
           <Image source={logoRestaurant} style={styles.logo} />
@@ -39,20 +46,20 @@ const CustomerSidebar = ({ isOpen = true }) => {
         <Text style={styles.subtitle}>Panel de Cliente</Text>
       </View>
 
-      {/* Navegación */}
       <ScrollView style={styles.nav} contentContainerStyle={styles.navContent}>
         {menuLinks.map((link, index) => (
-          <TouchableOpacity 
-            key={index} 
-            style={styles.link} 
-            onPress={() => navigation.navigate(link.path)}
+          <TouchableOpacity
+            key={index}
+            style={styles.link}
+            onPress={() => {
+              try { navigation.navigate(link.path); } catch {}
+            }}
           >
             <Text style={styles.linkText}>{link.label}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
-      {/* Usuario y Logout */}
       <View style={styles.footer}>
         <View style={styles.userBox}>
           <Text style={styles.mutedText}>Usuario conectado</Text>
@@ -62,12 +69,23 @@ const CustomerSidebar = ({ isOpen = true }) => {
           <Text style={styles.logoutText}>Cerrar Sesión</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  sidebar: { width: 288, height: '100%', backgroundColor: '#000', borderRightWidth: 1, borderColor: '#333' },
+  sidebar: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: SIDEBAR_WIDTH,
+    height: '100%',
+    backgroundColor: '#000',
+    borderRightWidth: 1,
+    borderColor: '#333',
+    zIndex: 100,
+    elevation: 10,
+  },
   header: { padding: 24 },
   logoContainer: { borderRadius: 24, overflow: 'hidden', backgroundColor: '#ffffff10' },
   logo: { width: '100%', height: 192 },

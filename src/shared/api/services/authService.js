@@ -4,11 +4,13 @@ export const authService = {
   login: async (email, password) => {
     try {
       const response = await authClient.post('/login', { email, password });
+      const data = response.data;
       return {
         success: true,
-        token: response.data?.token || response.data?.accessToken || null,
-        refreshToken: response.data?.refreshToken || null,
-        user: response.data?.user || response.data?.data || null,
+        token: data?.accessToken || data?.token || null,
+        refreshToken: data?.refreshToken || null,
+        expiresAt: data?.expiresAt || (data?.expiresIn ? new Date(Date.now() + data.expiresIn * 1000).toISOString() : null),
+        user: data?.userDetails || data?.user || data?.data || null,
       };
     } catch (error) {
       return {
