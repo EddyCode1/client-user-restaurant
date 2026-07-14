@@ -10,11 +10,11 @@ loadTrelloEnv();
 const DONE = [
   {
     match: 'Completar OrderTimerBadge',
-    note: 'useDetallePedidoStore usa /detallepedido/order/:id + OrderTimerBadge auto-completar. main bdae4d4+',
+    note: 'merge ft/oscar c266f1b: timer, retry, detalle por orden, auto-completar.',
   },
   {
     match: '[Cliente] Flujo completo de pedidos',
-    note: 'CustomerOrderCreateScreen saveOrder + cupón + lista órdenes. main 70dbf6a+',
+    note: 'merge ft/oscar c266f1b: crear pedido + lista + cupón + timer en CustomerOrdersScreen.',
   },
   {
     match: 'Permisos POST /reservation',
@@ -38,15 +38,19 @@ const DONE = [
   },
   {
     match: 'Verificar CustomerMenuScreen',
-    note: 'useMenuStore GET /menu implementado. Pendiente solo QA manual en emulador.',
+    note: 'merge ft/eddy b9c04cc: menú, layout, JWT en adminClient/authClient. QA manual pendiente.',
   },
   {
     match: 'RegisterScreen',
-    note: 'RegisterScreen + authService.register implementados. Pendiente QA registro E2E.',
+    note: 'merge ft/kevin e2267d8: validaciones registro + errores authService. QA E2E pendiente.',
   },
   {
     match: '[Cliente] Push main',
-    note: 'main sincronizado: mapas, pedidos, reservas, factura, deploy, start:all. e094e21',
+    note: 'main unificado: ft/oscar, ft/eddy, ft/kevin, ft/zeta, mapas, deploy. b776ccd',
+  },
+  {
+    match: 'Fix auth: errores visibles',
+    note: 'merge ft/eddy: JWT refresh, authStore, LoginScreen. main b9c04cc+',
   },
 ];
 
@@ -77,6 +81,11 @@ const NEW_LISTO = [
   {
     name: 'Fix crear pedido + cupón + reservas modal',
     desc: 'saveOrder, user_id, cancelReservation. main 70dbf6a',
+    member: 'jsajche2024380',
+  },
+  {
+    name: 'Merge ft/oscar + ft/eddy + ft/kevin en main',
+    desc: 'Pedidos/timer (oscar), menú/JWT (eddy), registro (kevin). main b776ccd',
     member: 'jsajche2024380',
   },
 ];

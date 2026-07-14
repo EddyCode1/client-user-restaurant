@@ -2,7 +2,7 @@
 
 **Board:** [gestion-de-restaurante](https://trello.com/b/DeIhDyk9/gestion-de-restaurante)
 
-Última sync con código: **2026-07-08** (`deploy/sync-trello-from-code.mjs`)
+Última sync con código: **2026-07-13** (`deploy/sync-trello-from-code.mjs`)
 
 ## Comandos
 
@@ -13,23 +13,33 @@ node deploy/trello-cli.mjs cards
 
 ---
 
-## Listo (código verificado en main)
+## Listo (código verificado en main — `b776ccd`)
 
-| Tarjeta | Asignado |
-|---------|----------|
-| Infra: docker-compose, seed, babel, auth, detallePedido, README, Docker mobile | — |
-| Mapas: plugin, pantallas, OSRM, docs web vs nativo | jsajche |
-| Push main + deploy/README | jsajche |
-| OrderTimerBadge + detalle pedido | oscar |
-| Flujo pedidos crear + listar | oscar |
-| Permisos POST /reservation CLIENTE (backend) | pablo |
-| Factura/cupones E2E (merge ft/zeta) | zeta |
-| Pantalla reservas listar + crear | zeta |
-| Lista y detalle restaurantes | kevin |
-| MenuViewModal platos/bebidas | jztea |
-| CustomerMenuScreen + useMenuStore | eddy |
-| RegisterScreen + registro CLIENTE | eddy |
-| Fix ContactScreen, start:all, pedidos/reservas | jsajche |
+| Tarjeta | Asignado | Merge / commit |
+|---------|----------|----------------|
+| Infra: docker-compose, seed, babel, auth, detallePedido, README, Docker mobile | — | main |
+| Mapas: pantallas, OSRM, autolinking (sin plugin) | jsajche | c93868b |
+| Push main + deploy/README | jsajche | b776ccd |
+| OrderTimerBadge + detalle pedido | oscar | **ft/oscar** `c266f1b` |
+| Flujo pedidos crear + listar | oscar | **ft/oscar** `c266f1b` |
+| Permisos POST /reservation CLIENTE (backend) | pablo | backend main |
+| Factura/cupones E2E | zeta | **ft/zeta** `4c712e0` |
+| Pantalla reservas listar + crear | zeta | **ft/zeta** `4c712e0` |
+| Lista y detalle restaurantes | kevin | main |
+| MenuViewModal platos/bebidas | jztea | main `12f8bc3` |
+| CustomerMenuScreen + useMenuStore | eddy | **ft/eddy** `b9c04cc` |
+| RegisterScreen + registro CLIENTE | kevin | **ft/kevin** `e2267d8` |
+| Fix auth JWT + errores visibles | eddy | **ft/eddy** `b9c04cc` |
+| Fix ContactScreen, start:all, pedidos/reservas | jsajche | main |
+
+### Ramas integradas en main
+
+| Rama | Estado |
+|------|--------|
+| `ft/oscar` | Mergeado |
+| `ft/eddy` | Mergeado |
+| `ft/kevin` | Mergeado |
+| `ft/zeta` | Mergeado (antes) |
 
 ---
 
@@ -38,6 +48,9 @@ node deploy/trello-cli.mjs cards
 | Tarjeta | Asignado |
 |---------|----------|
 | Probar flujo nativo Android/iOS (`pnpm start:all`) | kevin |
+| Registro CLIENTE E2E (nuevo usuario) | kevin |
+| Menú + JWT en emulador | eddy |
+| Timer pedidos + reintentar detalle | oscar |
 
 ---
 
@@ -48,6 +61,7 @@ node deploy/trello-cli.mjs cards
 | Probar GPS en dispositivo físico | jsajche | Requiere celular real + dev build con mapas |
 | Actualizar e2e/ADMIN.md para cliente | jztea | Sigue contenido del módulo banco |
 | CI: pnpm build:web en PR | eddy | No hay workflow en .github |
+| Google Maps API key Android (mapa gris) | jsajche | Opcional para producción |
 
 ---
 
@@ -55,6 +69,6 @@ node deploy/trello-cli.mjs cards
 
 | Tarea | Estado |
 |-------|--------|
-| Plugin + pantallas + OSRM | Listo |
+| Pantallas + OSRM + autolinking | Listo |
 | GPS dispositivo físico | Pendiente |
 | `pnpm rebuild:native` / `start:all` para mapa en emulador | Revisión QA |
