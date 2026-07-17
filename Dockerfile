@@ -8,8 +8,8 @@ COPY . .
 
 ARG EXPO_PUBLIC_DEV_HOST=localhost
 ARG EXPO_PUBLIC_API_PORT=3006
-ARG EXPO_PUBLIC_AUTH_URL=http://localhost:3006/GestorRestaurante/v1/auth
-ARG EXPO_PUBLIC_API_BASE=http://localhost:3006/GestorRestaurante/v1
+ARG EXPO_PUBLIC_AUTH_URL=https://gesti-n-de-restaurante.onrender.com/GestorRestaurante/v1/auth
+ARG EXPO_PUBLIC_API_BASE=https://gesti-n-de-restaurante.onrender.com/GestorRestaurante/v1
 
 ENV EXPO_PUBLIC_DEV_HOST=$EXPO_PUBLIC_DEV_HOST
 ENV EXPO_PUBLIC_API_PORT=$EXPO_PUBLIC_API_PORT

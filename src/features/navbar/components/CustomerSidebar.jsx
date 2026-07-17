@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Animated, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthStore } from '../../../shared/store/authStore';
-import logoRestaurant from '../../../../assets/icon.png';
+import logoRestaurant from '../../../../assets/logo.png';
 
 const SIDEBAR_WIDTH = 288;
 
@@ -23,6 +23,9 @@ const CustomerSidebar = ({ isOpen = true }) => {
     logout();
     navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
   };
+
+  const isTabScreen = (path) =>
+    ['CustomerHome', 'Restaurants', 'Menu', 'Orders', 'Reservations', 'Coupons'].includes(path);
 
   const menuLinks = [
     { label: 'Menú Principal', path: 'CustomerHome' },
@@ -52,7 +55,11 @@ const CustomerSidebar = ({ isOpen = true }) => {
             key={index}
             style={styles.link}
             onPress={() => {
-              try { navigation.navigate(link.path); } catch {}
+              if (isTabScreen(link.path)) {
+                navigation.navigate('MainTabs', { screen: link.path });
+              } else {
+                navigation.navigate(link.path);
+              }
             }}
           >
             <Text style={styles.linkText}>{link.label}</Text>

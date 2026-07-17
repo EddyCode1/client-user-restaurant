@@ -3,12 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const menuItems = [
-  { id: 1, label: 'Restaurantes', path: 'Restaurants' },
-  { id: 2, label: 'Mapa General', path: 'MapaGeneral' },
-  { id: 3, label: 'Mesas', path: 'TableLayout' },
-  { id: 4, label: 'Reservaciones', path: 'Reservations' },
-  { id: 5, label: 'Menú', path: 'Menu' },
-  { id: 6, label: 'Órdenes', path: 'Orders' },
+  { id: 1, label: 'Restaurantes', path: 'Restaurants', isTab: true },
+  { id: 2, label: 'Mapa General', path: 'MapaGeneral', isTab: false },
+  { id: 3, label: 'Mesas', path: 'TableLayout', isTab: false },
+  { id: 4, label: 'Reservaciones', path: 'Reservations', isTab: true },
+  { id: 5, label: 'Menú', path: 'Menu', isTab: true },
+  { id: 6, label: 'Órdenes', path: 'Orders', isTab: true },
 ];
 
 const NAVBAR_TITLE = 'CONOZCA NUESTRAS RAMAS';
@@ -35,7 +35,13 @@ const CustomerNavbarBlack = ({ isSidebarOpen = true, onToggleSidebar }) => {
         {menuItems.map((item) => (
           <TouchableOpacity 
             key={item.id} 
-            onPress={() => navigation.navigate(item.path)}
+            onPress={() => {
+              if (item.isTab) {
+                navigation.navigate('MainTabs', { screen: item.path });
+              } else {
+                navigation.navigate(item.path);
+              }
+            }}
             style={styles.menuItem}
           >
             <Text style={styles.menuText}>{item.label}</Text>

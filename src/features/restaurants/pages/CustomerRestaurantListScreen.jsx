@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { View, Text, TextInput, StyleSheet, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useRestaurantStore from '../../restaurant/store/useRestaurantStore';
 import CustomerRestaurantList from '../components/CustomerRestaurantList';
@@ -11,10 +11,20 @@ export default function CustomerRestaurantListScreen() {
   const { restaurants, fetchRestaurants, loading } = useRestaurantStore();
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchRestaurants();
   }, [fetchRestaurants]);
+
+  const filteredRestaurants = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return restaurants;
+    return (restaurants || []).filter((r) => {
+      const name = (r.restaurant_name || r.name || '').toLowerCase();
+      return name.includes(q);
+    });
+  }, [restaurants, searchQuery]);
 
   const handleView = async (restaurant) => {
     const id = restaurant?._id || restaurant?.id || null;
@@ -33,14 +43,23 @@ export default function CustomerRestaurantListScreen() {
   };
 
   const listHeader = (
-    <View style={styles.section}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.overline}>RESTAURANTES</Text>
-          <Text style={styles.title}>Explora nuestros locales</Text>
-        </View>
-        <View style={styles.countBadge}>
-          <Text style={styles.countText}>{restaurants?.length || 0} locales</Text>
+    <View>
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Buscar restaurante por nombre..."
+        placeholderTextColor="#71717A"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+      <View style={styles.section}>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.overline}>RESTAURANTES</Text>
+            <Text style={styles.title}>Explora nuestros locales</Text>
+          </View>
+          <View style={styles.countBadge}>
+            <Text style={styles.countText}>{filteredRestaurants?.length || 0} locales</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -49,7 +68,7 @@ export default function CustomerRestaurantListScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <CustomerRestaurantList
-        restaurants={restaurants}
+        restaurants={filteredRestaurants}
         loading={loading}
         onView={handleView}
         listHeaderComponent={listHeader}
@@ -68,6 +87,16 @@ export default function CustomerRestaurantListScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#111111' },
+  searchBar: {
+    backgroundColor: '#18181B',
+    borderRadius: 12,
+    padding: 12,
+    color: '#FFFFFF',
+    fontSize: 16,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 4,
+  },
   section: {
     backgroundColor: 'rgba(31, 41, 55, 0.2)',
     borderRadius: 40,
